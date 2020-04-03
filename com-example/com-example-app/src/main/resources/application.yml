@@ -1,0 +1,11 @@
+server:
+  port: 8081
+
+spring:
+  profiles:
+    active: @spring.profiles.active@
+
+  application:
+    name: com-example-app
+
+
