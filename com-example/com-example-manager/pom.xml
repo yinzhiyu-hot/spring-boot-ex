@@ -9,8 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <name>com.example.manager</name>
-    <artifactId>com.example.manager</artifactId>
+    <name>com-example-manager</name>
+    <artifactId>com-example-manager</artifactId>
     <packaging>jar</packaging>
 
 </project>

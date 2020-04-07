@@ -9,8 +9,8 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <name>com.example.service</name>
-    <artifactId>com.example.service</artifactId>
+    <name>com-example-service</name>
+    <artifactId>com-example-service</artifactId>
     <packaging>jar</packaging>
 
 </project>
