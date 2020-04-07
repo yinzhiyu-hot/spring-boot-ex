@@ -3,6 +3,7 @@ package com.example.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.domain.entity.UserInfoEntity;
+import com.example.domain.vo.UserInfoVO;
 import com.example.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,12 +67,29 @@ public class ComExampleAppController {
      * @Return IPage<UserInfoEntity> 分页数据
      */
     @RequestMapping("/getInfoListPage")
-    public IPage<UserInfoEntity> getInfoListPage() {
+    public IPage<UserInfoEntity> getInfoListPage(UserInfoVO userInfoVO) {
         //需要在Config配置类中配置分页插件
         IPage<UserInfoEntity> page = new Page<>();
-        page.setCurrent(5); //当前页
-        page.setSize(1);    //每页条数
+        page.setCurrent(userInfoVO.getPageNumber()); //当前页
+        page.setSize(userInfoVO.getPageSize());    //每页条数
         page = userInfoService.page(page);
+        return page;
+    }
+
+    /**
+     * MP自定义SQL
+     *
+     * @Author Sans
+     * @CreateTime 2019/6/9 14:37
+     * @Return IPage<UserInfoEntity> 分页数据
+     */
+    @RequestMapping("/getInfoListSQL")
+    public IPage<UserInfoEntity> getInfoListSQL(UserInfoVO userInfoVO) {
+        //查询大于60分以上的学生,并且分页
+        IPage<UserInfoEntity> page = new Page<>();
+        page.setCurrent(userInfoVO.getPageNumber()); //当前页
+        page.setSize(userInfoVO.getPageSize());    //每页条数
+        page = userInfoService.selectUserInfoByGtFraction(page, 60L);
         return page;
     }
 
@@ -133,7 +151,7 @@ public class ComExampleAppController {
         List<UserInfoEntity> list = new ArrayList<>();
         list.add(sans);
         list.add(papyrus);
-        userInfoService.batchInsert(list);//耗时长(较下面13倍左右时长)
+        userInfoService.batchInsert(list);//较下面耗时长
         userInfoService.saveBatch(list);//耗时短
     }
 

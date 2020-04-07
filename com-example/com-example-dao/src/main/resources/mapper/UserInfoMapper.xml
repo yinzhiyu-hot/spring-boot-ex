@@ -25,4 +25,8 @@
             #{item.evaluate,jdbcType=VARCHAR}, #{item.fraction,jdbcType=BIGINT})
         </foreach>
     </insert>
+
+    <select id="selectUserInfoByGtFraction" resultType="com.example.domain.entity.UserInfoEntity" parameterType="long">
+        SELECT * FROM user_info WHERE fraction > #{fraction}
+    </select>
 </mapper>
