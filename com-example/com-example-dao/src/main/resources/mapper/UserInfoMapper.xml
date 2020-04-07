@@ -27,6 +27,6 @@
     </insert>
 
     <select id="selectUserInfoByGtFraction" resultType="com.example.domain.entity.UserInfoEntity" parameterType="long">
-        SELECT * FROM user_info WHERE fraction > #{fraction}
+        SELECT<include refid="Base_Column_List"/>FROM user_info WHERE fraction > #{param2}
     </select>
 </mapper>
