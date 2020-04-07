@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.mapper.UserInfoMapper">
+    <resultMap id="BaseResultMap" type="com.example.domain.entity.UserInfoEntity">
+        <!--@mbg.generated-->
+        <!--@Table user_info-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="age" jdbcType="INTEGER" property="age"/>
+        <result column="skill" jdbcType="VARCHAR" property="skill"/>
+        <result column="evaluate" jdbcType="VARCHAR" property="evaluate"/>
+        <result column="fraction" jdbcType="BIGINT" property="fraction"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, `name`, age, skill, evaluate, fraction
+    </sql>
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into user_info
+        (`name`, age, skill, evaluate, fraction)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.name,jdbcType=VARCHAR}, #{item.age,jdbcType=INTEGER}, #{item.skill,jdbcType=VARCHAR},
+            #{item.evaluate,jdbcType=VARCHAR}, #{item.fraction,jdbcType=BIGINT})
+        </foreach>
+    </insert>
+</mapper>

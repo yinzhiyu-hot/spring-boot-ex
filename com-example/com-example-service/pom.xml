@@ -13,4 +13,11 @@
     <artifactId>com-example-service</artifactId>
     <packaging>jar</packaging>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>com-example-manager</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
