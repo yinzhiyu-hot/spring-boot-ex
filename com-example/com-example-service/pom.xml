@@ -8,7 +8,7 @@
         <groupId>com.example</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
+    <description>业务逻辑层[包含各种业务操作]</description>
     <name>com-example-service</name>
     <artifactId>com-example-service</artifactId>
     <packaging>jar</packaging>

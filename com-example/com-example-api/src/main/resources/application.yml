@@ -8,7 +8,7 @@ spring:
     active: @spring.profiles.active@
 
   application:
-    name: com-example-app
+    name: com-example-api
 
 
 

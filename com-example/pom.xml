@@ -16,7 +16,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>com-example-app</module>
+        <module>com-example-api</module>
         <module>com-example-domain</module>
         <module>com-example-common</module>
         <module>com-example-service</module>

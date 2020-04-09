@@ -1,4 +1,4 @@
-package com.example.service;
+package com.example.service.business;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * @Description TODO
- * @PackagePath com.example.service.UserInfoService
+ * @PackagePath com.example.service.business.UserInfoService
  * @Author YINZHIYU
  * @Date 2020-04-07 10:00:00
  * @Version 1.0.0.0

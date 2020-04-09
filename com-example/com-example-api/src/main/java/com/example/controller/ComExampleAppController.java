@@ -4,12 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.domain.entity.UserInfoEntity;
 import com.example.domain.vo.UserInfoVO;
-import com.example.service.UserInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.service.business.UserInfoService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -28,7 +28,7 @@ public class ComExampleAppController {
         return String.format("%s,%s", "Hello", id);
     }
 
-    @Autowired
+    @Resource
     private UserInfoService userInfoService;
 
     /**
@@ -41,8 +41,7 @@ public class ComExampleAppController {
      */
     @RequestMapping("/getInfo")
     public UserInfoEntity getInfo(String userId) {
-        UserInfoEntity userInfoEntity = userInfoService.getById(userId);
-        return userInfoEntity;
+        return userInfoService.getById(userId);
     }
 
     /**
@@ -55,8 +54,7 @@ public class ComExampleAppController {
      */
     @RequestMapping("/getList")
     public List<UserInfoEntity> getList() {
-        List<UserInfoEntity> userInfoEntityList = userInfoService.list();
-        return userInfoEntityList;
+        return userInfoService.list();
     }
 
     /**
@@ -105,8 +103,7 @@ public class ComExampleAppController {
         Map<String, Object> map = new HashMap<>();
         //kay是字段名 value是字段值
         map.put("age", 20);
-        Collection<UserInfoEntity> userInfoEntityList = userInfoService.listByMap(map);
-        return userInfoEntityList;
+        return userInfoService.listByMap(map);
     }
 
     /**

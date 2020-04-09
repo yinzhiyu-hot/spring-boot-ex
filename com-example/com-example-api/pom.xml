@@ -7,9 +7,9 @@
         <artifactId>com-example</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <name>com-example-app</name>
-    <artifactId>com-example-app</artifactId>
+    <description>API层</description>
+    <name>com-example-api</name>
+    <artifactId>com-example-api</artifactId>
     <packaging>jar</packaging>
 
     <dependencies>

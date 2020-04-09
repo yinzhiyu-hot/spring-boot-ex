@@ -8,7 +8,7 @@
         <groupId>com.example</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
+    <description>公共模块[工具包，常量，枚举等等]</description>
     <name>com-example-common</name>
     <artifactId>com-example-common</artifactId>
     <packaging>jar</packaging>
