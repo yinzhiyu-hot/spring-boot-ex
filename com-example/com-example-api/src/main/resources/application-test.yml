@@ -21,3 +21,6 @@ spring:
       pool-prepared-statements: true
       max-open-prepared-statements: 20
       max-pool-prepared-statement-per-connection-size: 20
+
+rest:
+  domain: http://localhost:8081/

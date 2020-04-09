@@ -1,6 +1,6 @@
 package com.example.service.rest;
 
-import cn.hutool.json.JSONConverter;
+import com.example.common.configs.RestConfig;
 import com.example.domain.entity.UserInfoEntity;
 import com.example.service.rest.api.RestApiService;
 import org.springframework.stereotype.Component;
@@ -8,6 +8,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.List;
 
@@ -21,9 +22,12 @@ import java.util.List;
 @Component
 public class RestService {
 
+    @Resource
+    RestConfig restConfig;
+
     public List<UserInfoEntity> getUserInfoList() {
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://localhost:8081/")
+                .baseUrl(restConfig.wmsUrl)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         RestApiService service = retrofit.create(RestApiService.class);
