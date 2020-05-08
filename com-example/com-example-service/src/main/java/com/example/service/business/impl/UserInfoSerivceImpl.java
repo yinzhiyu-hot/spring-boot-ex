@@ -12,10 +12,10 @@ import javax.annotation.Resource;
 import java.util.List;
 
 /**
- * @Description TODO
+ * @Description 测试业务类
  * @PackagePath com.example.service.business.impl.UserInfoSerivceImpl
  * @Author YINZHIYU
- * @Date 2020-04-07 10:00:00
+ * @Date 2020/5/8 13:59
  * @Version 1.0.0.0
  **/
 @Service

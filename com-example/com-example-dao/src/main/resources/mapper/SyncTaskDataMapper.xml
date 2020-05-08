@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="com.example.dao.mapper.SyncTaskDataMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.domain.entity.SyncTaskData">
+        <id column="id" property="id"/>
+        <result column="task_id" property="taskId"/>
+        <result column="task_data" property="taskData"/>
+        <result column="data_index" property="dataIndex"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, task_id, task_data, data_index
+    </sql>
+
+
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sync_task_data
+        (task_id, task_data, data_index)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.taskId,jdbcType=INTEGER}, #{item.taskData,jdbcType=VARCHAR}, #{item.dataIndex,jdbcType=TINYINT}
+            )
+        </foreach>
+    </insert>
+</mapper>

@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="el" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--适配IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-theme.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrapValidator.min.css}">
+
+    <!-- JS -->
+    <script th:src="@{/static/script/common/jquery/js/jquery.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/moment-with-locales.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-table.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrapValidator.min.js}"></script>
+    <script th:src="@{/static/script/common/common.js}"></script>
+    <script th:src="@{/static/script/common/artDialog/js/dialog.js}"></script>
+    <script th:src="@{/static/script/index.js}"></script>
+
+
+    <title>首页</title>
+</head>
+<style>
+    html, body {
+        width: 100%;
+        height: 100%;
+
+        margin: 0px;
+    }
+
+    #main {
+        width: 100%;
+        height: 100%;
+        /* background:red;*/
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: start;
+    }
+
+    .top-head {
+        width: 100%;
+        height: 10%;
+        /* background: orange;*/
+        display: flex;
+        flex-wrap: no-wrap;
+        justify-content: center;
+    }
+
+    .left-menu {
+        width: 12%;
+        height: 90%;
+        /*background:yellow;*/
+    }
+
+    .right-content {
+        width: 87%;
+        height: 95%;
+        /*   background:blue;*/
+    }
+
+    #logo {
+        width: 10%;
+        height: 100%;
+        line-height: 80px;
+        /*background:purple;*/
+    }
+
+    #title {
+        width: 50%;
+        font-size: 28px;
+        text-align: center;
+        line-height: 80px;
+        /*background:#eee;*/
+    }
+
+    #per-mes {
+        width: 20%;
+        height: 100%;
+        line-height: 80px;
+        /*background:green;*/
+    }
+
+    li {
+        list-style: none;
+    }
+
+    a {
+        text-decoration: none;
+    }
+
+    a:focus, a:hover {
+        color: #23527c;
+        text-decoration: none;
+    }
+
+    li:hover {
+        list-style: none;
+    }
+
+</style>
+<body>
+<div id="main">
+
+    <div class="left-menu" style="margin: 5px;">
+        <!-- 侧边栏标签页 -->
+        <ul class="nav nav-pills nav-stacked">
+            <!-- 侧边栏选项 -->
+            <li role="presentation" class="active">
+                <!-- 选项控制data-target对应的显隐 -->
+                <a href="#" data-toggle="collapse" data-target="#list">管理中心</a>
+                <!-- 隐藏的详细菜单 -->
+                <ul id="list" class="collapse in">
+                    <li class="active" style="padding: 10px; ">
+                        <a onclick="go('/com-example/jobs/pages')">
+                            Jobs管理
+                        </a>
+                    </li>
+                    <li class="active" style="padding: 10px">
+                        <a onclick="go('/com-example/tasks/pages')">
+                            Tasks管理
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+
+    </div>
+    <div class="right-content">
+        <div style="width:99%;height: 100%;margin: 5px;">
+            <iframe id="rightContent" name="rightContent" width="100%" height="100%" frameborder="0"></iframe>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>

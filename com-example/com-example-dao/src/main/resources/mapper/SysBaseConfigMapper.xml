@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.mapper.SysBaseConfigMapper">
+    <resultMap id="BaseResultMap" type="com.example.domain.entity.SysBaseConfig">
+        <!--@mbg.generated-->
+        <!--@Table sys_base_config-->
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="biz_type" jdbcType="VARCHAR" property="bizType"/>
+        <result column="biz_key" jdbcType="VARCHAR" property="bizKey"/>
+        <result column="biz_value" jdbcType="VARCHAR" property="bizValue"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="del_flag" jdbcType="TINYINT" property="delFlag"/>
+        <result column="ts" jdbcType="TIMESTAMP" property="ts"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, biz_type, biz_key, biz_value, remark, del_flag, ts
+    </sql>
+    <update id="updateBatch" parameterType="java.util.List">
+        <!--@mbg.generated-->
+        update sys_base_config
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="biz_type = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.bizType,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="biz_key = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.bizKey,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="biz_value = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.bizValue,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="remark = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.remark,jdbcType=VARCHAR}
+                </foreach>
+            </trim>
+            <trim prefix="del_flag = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.delFlag,jdbcType=TINYINT}
+                </foreach>
+            </trim>
+            <trim prefix="ts = case" suffix="end,">
+                <foreach collection="list" index="index" item="item">
+                    when id = #{item.id,jdbcType=BIGINT} then #{item.ts,jdbcType=TIMESTAMP}
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach close=")" collection="list" item="item" open="(" separator=", ">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+    <insert id="batchInsert" keyColumn="id" keyProperty="id" parameterType="map" useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_base_config
+        (biz_type, biz_key, biz_value, remark, del_flag, ts)
+        values
+        <foreach collection="list" item="item" separator=",">
+            (#{item.bizType,jdbcType=VARCHAR}, #{item.bizKey,jdbcType=VARCHAR}, #{item.bizValue,jdbcType=VARCHAR},
+            #{item.remark,jdbcType=VARCHAR}, #{item.delFlag,jdbcType=TINYINT}, #{item.ts,jdbcType=TIMESTAMP}
+            )
+        </foreach>
+    </insert>
+    <insert id="insertOrUpdate" keyColumn="id" keyProperty="id" parameterType="com.example.domain.entity.SysBaseConfig"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_base_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            biz_type,
+            biz_key,
+            biz_value,
+            remark,
+            del_flag,
+            ts,
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            #{bizType,jdbcType=VARCHAR},
+            #{bizKey,jdbcType=VARCHAR},
+            #{bizValue,jdbcType=VARCHAR},
+            #{remark,jdbcType=VARCHAR},
+            #{delFlag,jdbcType=TINYINT},
+            #{ts,jdbcType=TIMESTAMP},
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            biz_type = #{bizType,jdbcType=VARCHAR},
+            biz_key = #{bizKey,jdbcType=VARCHAR},
+            biz_value = #{bizValue,jdbcType=VARCHAR},
+            remark = #{remark,jdbcType=VARCHAR},
+            del_flag = #{delFlag,jdbcType=TINYINT},
+            ts = #{ts,jdbcType=TIMESTAMP},
+        </trim>
+    </insert>
+    <insert id="insertOrUpdateSelective" keyColumn="id" keyProperty="id" parameterType="com.example.domain.entity.SysBaseConfig"
+            useGeneratedKeys="true">
+        <!--@mbg.generated-->
+        insert into sys_base_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="bizType != null">
+                biz_type,
+            </if>
+            <if test="bizKey != null">
+                biz_key,
+            </if>
+            <if test="bizValue != null">
+                biz_value,
+            </if>
+            <if test="remark != null">
+                remark,
+            </if>
+            <if test="delFlag != null">
+                del_flag,
+            </if>
+            <if test="ts != null">
+                ts,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="bizType != null">
+                #{bizType,jdbcType=VARCHAR},
+            </if>
+            <if test="bizKey != null">
+                #{bizKey,jdbcType=VARCHAR},
+            </if>
+            <if test="bizValue != null">
+                #{bizValue,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                #{delFlag,jdbcType=TINYINT},
+            </if>
+            <if test="ts != null">
+                #{ts,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+        on duplicate key update
+        <trim suffixOverrides=",">
+            <if test="id != null">
+                id = #{id,jdbcType=BIGINT},
+            </if>
+            <if test="bizType != null">
+                biz_type = #{bizType,jdbcType=VARCHAR},
+            </if>
+            <if test="bizKey != null">
+                biz_key = #{bizKey,jdbcType=VARCHAR},
+            </if>
+            <if test="bizValue != null">
+                biz_value = #{bizValue,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="delFlag != null">
+                del_flag = #{delFlag,jdbcType=TINYINT},
+            </if>
+            <if test="ts != null">
+                ts = #{ts,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

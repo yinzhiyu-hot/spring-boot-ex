@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--suppress ALL -->
+<mapper namespace="com.example.dao.mapper.SyncTaskMapper">
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.example.domain.entity.SyncTask">
+        <id column="id" property="id"/>
+        <result column="task_type" property="taskType"/>
+        <result column="task_status" property="taskStatus"/>
+        <result column="task_desc" property="taskDesc"/>
+        <result column="process_count" property="processCount"/>
+        <result column="create_date" property="createDate"/>
+        <result column="finish_date" property="finishDate"/>
+        <result column="ts" property="ts"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id, task_type, task_status,task_desc, process_count, create_date, finish_date, ts
+    </sql>
+
+    <!--根据ID进行分片查询任务 and (id % #{mol} = #{molValue})-->
+    <select id="getProcessTaskList" resultMap="BaseResultMap" parameterType="com.example.domain.dto.SyncTaskDto">
+        select *
+        from sync_task
+        where
+        <![CDATA[
+               process_count < 5
+        ]]>
+          and task_status in (0, 1)
+          and task_type = #{taskType}
+    </select>
+</mapper>

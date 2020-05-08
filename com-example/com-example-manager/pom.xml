@@ -6,7 +6,7 @@
     <parent>
         <artifactId>com-example</artifactId>
         <groupId>com.example</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
 
     <description>事务管理层[多个操作需要事务时此处处理]</description>
@@ -14,11 +14,12 @@
     <artifactId>com-example-manager</artifactId>
     <packaging>jar</packaging>
 
+
     <dependencies>
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>com-example-dao</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>

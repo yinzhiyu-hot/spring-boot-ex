@@ -22,5 +22,22 @@ spring:
       max-open-prepared-statements: 20
       max-pool-prepared-statement-per-connection-size: 20
 
+  redis:
+    database: 10
+    host: ${REDIS-HOST:127.0.0.1}
+    password:
+
+#Zookeeper
+regCenter:
+  serverList: localhost:2181
+  namespace: com-example-api
+
+#业务系统Rest Api Url
 rest:
-  domain: http://localhost:8081/
+  example:
+    domain: http://localhost:8082
+
+#日志配置
+logging:
+  level:
+    cn.wangoon.*: debug

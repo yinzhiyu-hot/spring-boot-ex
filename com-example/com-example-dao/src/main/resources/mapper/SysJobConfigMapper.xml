@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.dao.mapper.SysJobConfigMapper">
+    <resultMap id="BaseResultMap" type="com.example.domain.entity.SysJobConfig">
+        <!--@mbg.generated-->
+        <!--@Table sys_job_config-->
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="job_name" jdbcType="VARCHAR" property="jobName"/>
+        <result column="job_class_bean_name" jdbcType="VARCHAR" property="jobClassBeanName"/>
+        <result column="sharding_total_count" jdbcType="INTEGER" property="shardingTotalCount"/>
+        <result column="sharding_item_params" jdbcType="VARCHAR" property="shardingItemParams"/>
+        <result column="cron_expression" jdbcType="VARCHAR" property="cronExpression"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="job_status" jdbcType="TINYINT" property="jobStatus"/>
+        <result column="create_user" jdbcType="VARCHAR" property="createUser"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_user" jdbcType="VARCHAR" property="updateUser"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        <!--@mbg.generated-->
+        id, job_name, job_class_bean_name, sharding_total_count, sharding_item_params, cron_expression,
+        remark, job_status, create_user, create_time, update_user, update_time
+    </sql>
+</mapper>

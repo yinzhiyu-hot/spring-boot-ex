@@ -4,13 +4,13 @@ import com.example.domain.entity.UserInfoEntity;
 import org.springframework.stereotype.Component;
 
 /**
- * @Description TODO
+ * @Description 测试Manager
  * @PackagePath com.example.manager.UserInfoManager
  * @Author YINZHIYU
- * @Date 2020-04-07 10:01:00
+ * @Date 2020/5/8 13:57
  * @Version 1.0.0.0
  **/
 @Component
 public interface UserInfoManager {
-    public int saveUser(UserInfoEntity userInfoEntity);
+    int saveUser(UserInfoEntity userInfoEntity);
 }

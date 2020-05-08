@@ -6,10 +6,10 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 /**
- * @Description TODO
+ * @Description 测试实体
  * @PackagePath com.example.domain.entity.UserInfoEntity
  * @Author YINZHIYU
- * @Date 2020-04-07 09:54:00
+ * @Date 2020/5/8 13:56
  * @Version 1.0.0.0
  **/
 @Data

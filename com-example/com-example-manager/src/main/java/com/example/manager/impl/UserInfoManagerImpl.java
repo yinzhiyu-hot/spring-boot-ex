@@ -10,10 +10,10 @@ import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import javax.annotation.Resource;
 
 /**
- * @Description TODO
+ * @Description 测试Manager 实现
  * @PackagePath com.example.manager.impl.UserInfoManagerImpl
  * @Author YINZHIYU
- * @Date 2020-04-07 10:02:00
+ * @Date 2020/5/8 13:57
  * @Version 1.0.0.0
  **/
 @Component

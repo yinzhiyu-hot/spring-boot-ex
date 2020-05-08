@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="el" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--适配IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-theme.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrapValidator.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-select.min.css}">
+
+    <!-- JS -->
+    <script th:src="@{/static/script/common/jquery/js/jquery.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/moment-with-locales.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-table.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-select.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrapValidator.min.js}"></script>
+    <script th:src="@{/static/script/common/artDialog/js/dialog.js}"></script>
+    <script th:src="@{/static/script/common/common.js}"></script>
+    <script th:src="@{/static/script/jobs_manager.js}"></script>
+
+
+    <title>Jobs管理中心</title>
+</head>
+<style>
+    table td {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">数据查询</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="status">状态：</label>
+                <select id="status" name="status" class="selectpicker show-tick form-control">
+                    <option value="" selected>全部</option>
+                    <option th:value="0">停止</option>
+                    <option th:value="1">启动</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-primary" id="queryBtn">查询</button>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-primary" style="height: 100%">
+    <div class="panel-heading">
+        <h3 class="panel-title">Jobs列表</h3>
+    </div>
+    <div class="panel-body">
+        <table id="table" data-height="500" style="table-layout:fixed"
+               class="table table-condensed table-bordered table-hover table-striped"></table>
+    </div>
+</div>
+
+<div class="modal fade" id="updateJobConfig" backdrop="static" keyboard="false">
+    <div style="width: 600px;height:100px; z-index: 10; position: absolute; text-align: center; left: 40%; top: 20%;margin-left:-100px;margin-top:-10px">
+        　　　　
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <label class="panel-title" style="font-size: 25px;font-family: 'Microsoft YaHei UI';font-weight:bold ">Job配置信息</label>
+            </div>
+
+            <div class="container" style="width: 600px;float: left;background: white;padding-top: 15px;">
+                <div class="row">
+                    <!-- form: -->
+                    <section>
+                        <div class="col-lg-8 col-lg-offset-0" style="width: 600px;">
+                            <form id="defaultForm" method="post" class="form-horizontal">
+                                <input type="hidden" name="id" id="id">
+                                <input type="hidden" name="jobName" id="jobName">
+                                <input type="hidden" name="jobClassBeanName" id="jobClassBeanName">
+                                <input type="hidden" name="jobStatus" id="jobStatus">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="shardingTotalCount"><label style="color: red;">*</label>分片数：</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" name="shardingTotalCount"
+                                               id="shardingTotalCount"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="shardingItemParams">分片参数：</label>
+                                    <div class="col-lg-7">
+                                        <textarea type="text" rows="4" style="width: 100%" class="form-control" name="shardingItemParams"
+                                                  id="shardingItemParams"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="cronExpression"><label style="color: red;">*</label>Cron表达式：</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" name="cronExpression"
+                                               id="cronExpression"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="remark">备注：</label>
+                                    <div class="col-lg-7">
+                                        <textarea type="text" rows="4" class="form-control" name="remark"
+                                                  id="remark"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-lg-7 col-lg-offset-4">
+                                        <button type="button" class="btn btn-primary" style="width: 40%" id="submitBtn">提交</button>
+                                        <button type="button" class="btn btn-info" style="width: 35%" id="cancelBtn">取消</button>
+                                        <!--                                <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">Loading state</button>-->
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <!-- :form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

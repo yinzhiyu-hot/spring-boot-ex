@@ -5,12 +5,25 @@ server:
 
 spring:
   profiles:
-    active: @spring.profiles.active@
+    active: '@spring.profiles.active@'
 
   application:
     name: com-example-api
 
+  #thymeleaf
+  thymeleaf:
+    cache: false
+    prefix: classpath:/static/pages/
+    check-template-location: true
+    suffix: .html
+    encoding: UTF-8
+    mode: HTML5
 
+  #静态资源本地化读取
+  mvc:
+    static-path-pattern: /static/**
+  resources:
+    static-locations: classpath:/static/
 
 # mybatis-plus相关配置
 mybatis-plus:
@@ -31,6 +44,9 @@ mybatis-plus:
     # 如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
     call-setters-on-nulls: true
     # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
-    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+
+
 
 

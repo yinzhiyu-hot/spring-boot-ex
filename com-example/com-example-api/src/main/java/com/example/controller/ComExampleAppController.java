@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.domain.entity.UserInfoEntity;
 import com.example.domain.vo.UserInfoVO;
 import com.example.service.business.UserInfoService;
-import com.example.service.rest.RestService;
+import com.example.service.rest.example.ExampleRestService;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,7 +17,7 @@ import java.util.*;
  * @Description TODO
  * @PackagePath com.example.controller.ComExampleAppController
  * @Author YINZHIYU
- * @Date 2020-04-03 11:11:00
+ * @Date 2020/5/8 13:43
  * @Version 1.0.0.0
  **/
 @RestController
@@ -33,7 +33,7 @@ public class ComExampleAppController {
     private UserInfoService userInfoService;
 
     @Resource
-    private RestService restService;
+    private ExampleRestService exampleRestService;
 
     /**
      * 根据ID获取用户信息
@@ -72,7 +72,7 @@ public class ComExampleAppController {
     @RequestMapping("/getListByRest")
     public List<UserInfoEntity> getListByRest() {
 
-        return restService.getUserInfoList();
+        return exampleRestService.userInfoList();
     }
 
     /**

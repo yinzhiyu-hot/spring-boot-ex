@@ -6,7 +6,7 @@
     <parent>
         <artifactId>com-example</artifactId>
         <groupId>com.example</groupId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0.0</version>
     </parent>
     <description>业务逻辑层[包含各种业务操作]</description>
     <name>com-example-service</name>
@@ -17,12 +17,7 @@
         <dependency>
             <groupId>com.example</groupId>
             <artifactId>com-example-manager</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.example</groupId>
-            <artifactId>com-example-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 </project>
