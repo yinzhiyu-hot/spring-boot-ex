@@ -1,5 +1,6 @@
 package com.example.service.rest.example;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.example.domain.entity.UserInfoEntity;
 import com.example.service.rest.BaseRestService;
 import com.example.service.rest.example.api.ExampleRestApi;
@@ -33,7 +34,7 @@ public class ExampleRestService extends BaseRestService {
         try {
             response = service.userInfoList().execute();
 
-            if (response.errorBody() != null) {
+            if (ObjectUtil.isNotEmpty(response.errorBody())) {
                 log.error(String.format("ExampleRestService ==> userInfoList ==> service.userInfoList().execute() ==> 调用失败：%s", response.errorBody().string()));
             }
         } catch (IOException e) {

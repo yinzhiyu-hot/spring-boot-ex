@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -55,7 +56,7 @@ public class TasksManagerCenterController {
     public Map<String, Object> listPage(@ApiParam(name = "分页", required = true) BasePageVO basePageVO, @ApiParam(name = "任务信息", required = true) SyncTask syncTask) {
         Page<SyncTask> page = new Page<SyncTask>(basePageVO.getPageNumber(), basePageVO.getPageSize());
         QueryWrapper<SyncTask> queryWrapper = new QueryWrapper<SyncTask>();
-        if (syncTask.getTaskStatus() != null) {
+        if (ObjectUtil.isNotEmpty(syncTask.getTaskStatus())) {
             queryWrapper.eq("task_status", syncTask.getTaskStatus());
         }
         if (StringUtils.notBlank(syncTask.getTaskType())) {
@@ -67,7 +68,7 @@ public class TasksManagerCenterController {
         IPage<SyncTask> pages = syncTaskService.getBaseMapper().selectPage(page, queryWrapper);
 
         List<SyncTask> taskList = pages.getRecords();
-        if (taskList != null && taskList.size() > 0) {
+        if (ObjectUtil.isNotEmpty(taskList)) {
             taskList.forEach(item -> {
                 QueryWrapper<SyncTaskData> query = new QueryWrapper<SyncTaskData>();
                 query.eq("task_id", item.getId());

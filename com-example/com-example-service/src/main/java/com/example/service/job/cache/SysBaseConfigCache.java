@@ -1,5 +1,6 @@
 package com.example.service.job.cache;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.enums.DelFlagEnum;
 import com.example.domain.entity.SysBaseConfig;
@@ -51,7 +52,7 @@ public class SysBaseConfigCache implements BaseCache {
      * @Auther YINZHIYU
      */
     private void convertMap(List<SysBaseConfig> sysBaseConfigs) {
-        if (sysBaseConfigs != null && sysBaseConfigs.size() > 0) {
+        if (ObjectUtil.isNotEmpty(sysBaseConfigs)) {
             //biz_type 分组
             Map<String, List<SysBaseConfig>> listBizTypeMap = sysBaseConfigs.stream().collect(Collectors.groupingBy(SysBaseConfig::getBizType));
 

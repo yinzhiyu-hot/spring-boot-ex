@@ -1,5 +1,6 @@
 package com.example.service.job.cache;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.dangdang.ddframe.job.lite.api.JobScheduler;
 import com.example.common.config.JobsConfig;
@@ -91,7 +92,7 @@ public class JobsConfigCache implements BaseCache {
     private void startJobs(List<SysJobConfig> sysJobConfigs) {
         for (SysJobConfig sysJobConfig : sysJobConfigs) {
             JobScheduler jobScheduler = createJobScheduler(sysJobConfig.getJobClassBeanName(), sysJobConfig.getCronExpression(), sysJobConfig.getShardingTotalCount(), sysJobConfig.getShardingItemParams());
-            if (jobScheduler != null) {
+            if (ObjectUtil.isNotEmpty(jobScheduler)) {
                 jobScheduler.init();
                 jobScheduler.getSchedulerFacade().registerStartUpInfo(JobStatusEnum.START.getStatus().equals(sysJobConfig.getJobStatus()));//是否启动
                 jobSchedulerMap.put(sysJobConfig.getJobClassBeanName(), jobScheduler);//便于管理JOB启停

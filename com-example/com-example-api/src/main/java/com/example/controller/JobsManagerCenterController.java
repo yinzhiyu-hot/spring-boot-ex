@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -64,7 +65,7 @@ public class JobsManagerCenterController {
     public Map<String, Object> listPage(@ApiParam(name = "分页", required = true) BasePageVO basePageVO, @ApiParam(name = "Job配置", required = true) SysJobConfig sysJobConfig) {
         Page<SysJobConfig> page = new Page<SysJobConfig>(basePageVO.getPageNumber(), basePageVO.getPageSize());
         QueryWrapper<SysJobConfig> queryWrapper = new QueryWrapper<>();
-        if (sysJobConfig.getJobStatus() != null) {
+        if (ObjectUtil.isNotEmpty(sysJobConfig.getJobStatus())) {
             queryWrapper.eq("job_status", sysJobConfig.getJobStatus());
         }
         queryWrapper.notIn("job_class_bean_name", JobsConstants.HEART_JOB_CLASS_BEAN_NAME);//过滤掉心跳监控，心跳监控不可进行管理

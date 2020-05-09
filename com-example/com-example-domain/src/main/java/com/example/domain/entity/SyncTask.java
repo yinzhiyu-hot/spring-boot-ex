@@ -1,5 +1,6 @@
 package com.example.domain.entity;
 
+import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
@@ -87,7 +88,7 @@ public class SyncTask implements Serializable {
 
     public String getTaskData() {
         StringBuffer taskDataStr = new StringBuffer();
-        if (syncTaskDataList != null && syncTaskDataList.size() > 0) {
+        if (ObjectUtil.isNotEmpty(syncTaskDataList)) {
             List<SyncTaskData> list = syncTaskDataList.stream().sorted(Comparator.comparing(SyncTaskData::getDataIndex)).collect(Collectors.toList());
             list.forEach(item -> {
                 taskDataStr.append(item.getTaskData());
