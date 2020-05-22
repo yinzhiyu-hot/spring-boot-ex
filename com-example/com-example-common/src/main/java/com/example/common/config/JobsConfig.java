@@ -44,24 +44,11 @@ public class JobsConfig {
     /**
      * @Description 任务配置类
      */
-    private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass,
-                                                         final String cron,
-                                                         final int shardingTotalCount,
-                                                         final String shardingItemParameters) {
-
-
-        return LiteJobConfiguration
-                .newBuilder(
-                        new SimpleJobConfiguration(
-                                JobCoreConfiguration.newBuilder(
-                                        jobClass.getName(), cron, shardingTotalCount)
-                                        .shardingItemParameters(shardingItemParameters)
-                                        .build()
-                                , jobClass.getCanonicalName()
-                        )
+    private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass, final String cron, final int shardingTotalCount, final String shardingItemParameters) {
+        return LiteJobConfiguration.newBuilder(
+                new SimpleJobConfiguration(
+                        JobCoreConfiguration.newBuilder(jobClass.getName(), cron, shardingTotalCount).shardingItemParameters(shardingItemParameters).build(), jobClass.getCanonicalName()
                 )
-                .overwrite(true)
-                .build();
-
+        ).overwrite(true).build();
     }
 }

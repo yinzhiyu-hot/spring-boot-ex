@@ -5,6 +5,9 @@ var Utils = {
 };
 
 function paramsMatter(value, row, index) {
+    if (value == null || value === '') {
+        return "";
+    }
     var span = document.createElement('span');
     span.setAttribute('title', value);
     span.innerHTML = value;
@@ -12,7 +15,7 @@ function paramsMatter(value, row, index) {
 }
 
 function dataFormatter(value, row, index) {
-    if (value == null) {
+    if (value == null || value === '') {
         return "";
     }
     var dt = new Date(value);

@@ -64,7 +64,7 @@ function initTable() {
                 field: 'taskStatus',
                 title: '操作',
                 width: 140,
-                align: "left",
+                align: "center",
                 formatter: operateFormatter
             }],
 
@@ -143,7 +143,7 @@ function reset(value) {
         },
         cancelValue: "取消"
     });
-    d.show();
+    d.showModal();
 }
 
 function taskDataDetail(row) {

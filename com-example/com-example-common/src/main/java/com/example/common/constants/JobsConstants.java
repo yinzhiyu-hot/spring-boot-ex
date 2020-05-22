@@ -12,8 +12,6 @@ public interface JobsConstants {
      * Jobs 参数
      */
     String SHARDING_PARAM_TASK_TYPE = "taskType";
-    String SHARDING_PARAM_SITE = "site";
-
 
     String HEART_JOB_CLASS_BEAN_NAME = "HeartStatusJob";
 }

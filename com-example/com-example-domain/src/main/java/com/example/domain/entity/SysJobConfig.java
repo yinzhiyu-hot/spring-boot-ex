@@ -88,5 +88,29 @@ public class SysJobConfig {
      * 更新IP
      */
     @TableField(exist = false)
-    private String updateIp;
+    private String updateIpPort;
+
+    public static final String COL_ID = "id";
+
+    public static final String COL_JOB_NAME = "job_name";
+
+    public static final String COL_JOB_CLASS_BEAN_NAME = "job_class_bean_name";
+
+    public static final String COL_SHARDING_TOTAL_COUNT = "sharding_total_count";
+
+    public static final String COL_SHARDING_ITEM_PARAMS = "sharding_item_params";
+
+    public static final String COL_CRON_EXPRESSION = "cron_expression";
+
+    public static final String COL_JOB_STATUS = "job_status";
+
+    public static final String COL_REMARK = "remark";
+
+    public static final String COL_CREATE_USER = "create_user";
+
+    public static final String COL_CREATE_TIME = "create_time";
+
+    public static final String COL_UPDATE_USER = "update_user";
+
+    public static final String COL_UPDATE_TIME = "update_time";
 }

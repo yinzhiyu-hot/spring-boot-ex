@@ -55,7 +55,7 @@
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
                 <excludes>
-                    <exclude>application-*.properties</exclude>
+                    <exclude>application-*.yml</exclude>
                     <exclude>static/script/common/bootstrap/fonts/**</exclude>
                 </excludes>
             </resource>
@@ -78,4 +78,32 @@
             </resource>
         </resources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>dev</id>  <!--开发环境 -->
+            <properties>
+                <deploy.type>dev</deploy.type>
+                <spring.profiles.active>dev</spring.profiles.active>
+            </properties>
+
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>test</id> <!--测试环境 -->
+            <properties>
+                <deploy.type>test</deploy.type>
+                <spring.profiles.active>test</spring.profiles.active>
+            </properties>
+        </profile>
+        <profile>
+            <id>pro</id> <!--生产环境 -->
+            <properties>
+                <deploy.type>pro</deploy.type>
+                <spring.profiles.active>pro</spring.profiles.active>
+            </properties>
+        </profile>
+    </profiles>
 </project>

@@ -99,4 +99,20 @@ public class SyncTask implements Serializable {
         }
         return taskData;
     }
+
+    public static final String COL_ID = "id";
+
+    public static final String COL_TASK_TYPE = "task_type";
+
+    public static final String COL_TASK_DESC = "task_desc";
+
+    public static final String COL_TASK_STATUS = "task_status";
+
+    public static final String COL_PROCESS_COUNT = "process_count";
+
+    public static final String COL_CREATE_DATE = "create_date";
+
+    public static final String COL_FINISH_DATE = "finish_date";
+
+    public static final String COL_TS = "ts";
 }

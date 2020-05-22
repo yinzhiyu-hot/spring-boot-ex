@@ -20,9 +20,9 @@ import java.util.Map;
 
 /**
  * @Description 系统启动中加载jobs配置, 且初始化job
- * @PackagePath com.example.service.job.cache.JobsConfigCache
+ * @PackagePath cn.wangoon.config.JobsConfigCache
  * @Author YINZHIYU
- * @Date 2020/5/8 14:14
+ * @Date 2020-04-13 09:55:00
  * @Version 1.0.0.0
  **/
 @Slf4j
@@ -76,7 +76,7 @@ public class JobsConfigCache implements BaseCache {
 
             jobScheduler = jobsConfig.addSimpleJobScheduler(job, cron, shardingTotalCount, shardingItemParameters);
         } catch (Exception e) {
-            log.error(String.format("创建job异常 -> %s", e.getMessage()));
+            log.error(String.format("创建job异常 ==> %s", e.getMessage()));
         }
         return jobScheduler;
     }
@@ -94,14 +94,14 @@ public class JobsConfigCache implements BaseCache {
             JobScheduler jobScheduler = createJobScheduler(sysJobConfig.getJobClassBeanName(), sysJobConfig.getCronExpression(), sysJobConfig.getShardingTotalCount(), sysJobConfig.getShardingItemParams());
             if (ObjectUtil.isNotEmpty(jobScheduler)) {
                 jobScheduler.init();
-                jobScheduler.getSchedulerFacade().registerStartUpInfo(JobStatusEnum.START.getStatus().equals(sysJobConfig.getJobStatus()));//是否启动
+                jobScheduler.getSchedulerFacade().registerStartUpInfo(JobStatusEnum.getStart(sysJobConfig.getJobStatus()));//是否启动
                 jobSchedulerMap.put(sysJobConfig.getJobClassBeanName(), jobScheduler);//便于管理JOB启停
                 sysJobConfigMap.put(sysJobConfig.getJobClassBeanName(), sysJobConfig);//便于管理JOB状态
             }
         }
 
         try {
-            redisUtils.redisTemplate.opsForValue().set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMap);
+            redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMap);
         } catch (Exception e) {
             log.error(String.format("JobsConfigCache ==> startJobs ==> 操作Redis ==> 异常：%s", e));
         }

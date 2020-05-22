@@ -70,4 +70,33 @@ public class SysBaseConfig {
     @ApiModelProperty(value = "时间戳")
     private Date ts;
 
+    /**
+     * 更新标识
+     */
+    @TableField(exist = false)
+    private boolean updateFlag;
+    /**
+     * 更新IP
+     */
+    @TableField(exist = false)
+    private String updateIpPort;
+    /**
+     * 操作说明
+     */
+    @TableField(exist = false)
+    private String operateDesc;
+
+    public static final String COL_ID = "id";
+
+    public static final String COL_BIZ_TYPE = "biz_type";
+
+    public static final String COL_BIZ_KEY = "biz_key";
+
+    public static final String COL_BIZ_VALUE = "biz_value";
+
+    public static final String COL_REMARK = "remark";
+
+    public static final String COL_DEL_FLAG = "del_flag";
+
+    public static final String COL_TS = "ts";
 }

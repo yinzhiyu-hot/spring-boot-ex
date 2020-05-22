@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="el" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <!--适配IE -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 适配移动端 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- CSS -->
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-table.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-theme.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrapValidator.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-select.min.css}">
+
+    <!-- JS -->
+    <script th:src="@{/static/script/common/jquery/js/jquery.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/moment-with-locales.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-table.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-table-zh-CN.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrap-select.min.js}"></script>
+    <script th:src="@{/static/script/common/bootstrap/js/bootstrapValidator.min.js}"></script>
+    <script th:src="@{/static/script/common/artDialog/js/dialog-plus.js}"></script>
+    <script th:src="@{/static/script/common/common.js}"></script>
+    <script th:src="@{/static/script/bases_manager.js}"></script>
+
+
+    <title>基础配置管理中心</title>
+</head>
+<style>
+    table td {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+</style>
+<body>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">数据查询</h3>
+    </div>
+    <div class="panel-body">
+        <form class="form-inline">
+            <div class="form-group">
+                <label for="bizType">业务类型：</label>
+                <input type="text" class="form-control" id="bizType">
+            </div>
+            <div class="form-group">
+                <label for="bizKey">业务配置键：</label>
+                <input type="text" class="form-control" id="bizKey">
+            </div>
+
+            <button type="button" class="btn btn-primary" id="queryBtn">查询</button>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-primary" style="height: 100%">
+    <div class="panel-heading">
+        <h3 class="panel-title">基础配置列表</h3>
+    </div>
+    <div class="panel-body">
+        <label><button type="button" class="btn btn-primary" id="addBtn">新增</button></label>
+        <table id="table" data-height="500" style="table-layout:fixed"
+               class="table table-condensed table-bordered table-hover table-striped"></table>
+    </div>
+</div>
+
+<div class="modal fade" id="addBaseConfig" backdrop="static" keyboard="false">
+    <div style="width: 600px;height:100px; z-index: 10; position: absolute; text-align: center; left: 35%; top: 20%;margin-left:-100px;margin-top:-10px">
+        　　　　
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <label class="panel-title" style="font-size: 25px;font-family: 'Microsoft YaHei UI';font-weight:bold ">基础配置信息-新增</label>
+            </div>
+
+            <div class="container" style="width: 600px;float: left;background: white;padding-top: 15px;">
+                <div class="row">
+                    <!-- form: -->
+                    <section>
+                        <div class="col-lg-8 col-lg-offset-0" style="width: 600px;">
+                            <form id="addForm" method="post" class="form-horizontal">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="bizTypeAdd"><label
+                                            style="color: red;">*</label>业务类型：</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" name="bizTypeAdd"
+                                               id="bizTypeAdd"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="bizKeyAdd"><label
+                                            style="color: red;">*</label>业务配置键：</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" name="bizKeyAdd"
+                                               id="bizKeyAdd"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="bizValueAdd"><label
+                                            style="color: red;">*</label>业务配置值：</label>
+                                    <div class="col-lg-7">
+                                        <textarea type="text" rows="4" class="form-control" name="bizValueAdd"
+                                                  id="bizValueAdd"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="remarkAdd">备注：</label>
+                                    <div class="col-lg-7">
+                                        <textarea type="text" rows="4" class="form-control" name="remarkAdd"
+                                                  id="remarkAdd"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-lg-7 col-lg-offset-4">
+                                        <button type="button" class="btn btn-primary" style="width: 40%" id="submitAddBtn">提交</button>
+                                        <button type="button" class="btn btn-info" style="width: 35%" id="cancelAddBtn">取消</button>
+                                        <!--                                <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">Loading state</button>-->
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <!-- :form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateBaseConfig" backdrop="static" keyboard="false">
+    <div style="width: 600px;height:100px; z-index: 10; position: absolute; text-align: center; left: 35%; top: 20%;margin-left:-100px;margin-top:-10px">
+        　　　　
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <label class="panel-title" style="font-size: 25px;font-family: 'Microsoft YaHei UI';font-weight:bold ">基础配置信息-编辑</label>
+            </div>
+
+            <div class="container" style="width: 600px;float: left;background: white;padding-top: 15px;">
+                <div class="row">
+                    <!-- form: -->
+                    <section>
+                        <div class="col-lg-8 col-lg-offset-0" style="width: 600px;">
+                            <form id="updateForm" method="post" class="form-horizontal">
+                                <input type="hidden" name="id" id="id">
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="bizTypeUpdate"><label
+                                            style="color: red;">*</label>业务类型：</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" name="bizTypeUpdate"
+                                               id="bizTypeUpdate"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="bizKeyUpdate"><label
+                                            style="color: red;">*</label>业务配置键：</label>
+                                    <div class="col-lg-7">
+                                        <input type="text" class="form-control" name="bizKeyUpdate"
+                                               id="bizKeyUpdate"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="bizValueUpdate"><label
+                                            style="color: red;">*</label>业务配置值：</label>
+                                    <div class="col-lg-7">
+                                        <textarea type="text" rows="4" class="form-control" name="bizValueUpdate"
+                                                  id="bizValueUpdate"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="col-lg-4 control-label" for="remarkUpdate">备注：</label>
+                                    <div class="col-lg-7">
+                                        <textarea type="text" rows="4" class="form-control" name="remarkUpdate"
+                                                  id="remarkUpdate"></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-lg-7 col-lg-offset-4">
+                                        <button type="button" class="btn btn-primary" style="width: 40%" id="submitUpdateBtn">提交</button>
+                                        <button type="button" class="btn btn-info" style="width: 35%" id="cancelUpdateBtn">取消</button>
+                                        <!--                                <button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off">Loading state</button>-->
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </section>
+                    <!-- :form -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

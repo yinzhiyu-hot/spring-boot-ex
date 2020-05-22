@@ -14,12 +14,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 /**
- * @Description 系统启动中加载基础配置
+ * @Description 基础配置缓存
  * @PackagePath com.example.service.job.cache.SysBaseConfigCache
  * @Author YINZHIYU
- * @Date 2020/5/8 14:14
+ * @Date 2020/5/22 11:48
  * @Version 1.0.0.0
  **/
 @Slf4j
@@ -38,7 +37,7 @@ public class SysBaseConfigCache implements BaseCache {
     public void init() {
         log.info("加载sysBaseConfigMap");
         QueryWrapper<SysBaseConfig> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("del_flag", DelFlagEnum.NO.getFlag());
+        queryWrapper.eq(SysBaseConfig.COL_DEL_FLAG, DelFlagEnum.NO.getFlag());
         List<SysBaseConfig> sysBaseConfigs = sysBaseConfigService.list(queryWrapper);
         convertMap(sysBaseConfigs);
     }
@@ -53,6 +52,9 @@ public class SysBaseConfigCache implements BaseCache {
      */
     private void convertMap(List<SysBaseConfig> sysBaseConfigs) {
         if (ObjectUtil.isNotEmpty(sysBaseConfigs)) {
+
+            sysBaseConfigMap.clear();
+
             //biz_type 分组
             Map<String, List<SysBaseConfig>> listBizTypeMap = sysBaseConfigs.stream().collect(Collectors.groupingBy(SysBaseConfig::getBizType));
 

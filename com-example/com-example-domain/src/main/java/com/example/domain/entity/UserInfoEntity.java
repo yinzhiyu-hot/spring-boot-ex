@@ -3,6 +3,7 @@ package com.example.domain.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.example.domain.annotation.ExcelProperty;
 import lombok.Data;
 
 /**
@@ -26,25 +27,31 @@ public class UserInfoEntity {
      * NONE: 该类型为未设置主键类型
      */
     @TableId(type = IdType.AUTO)
+    @ExcelProperty(excelTitle = "ID")
     private Long id;
     /**
      * 姓名
      */
+    @ExcelProperty(excelTitle = "NAME")
     private String name;
     /**
      * 年龄
      */
+    @ExcelProperty(excelTitle = "AGE")
     private Integer age;
     /**
      * 技能
      */
+    @ExcelProperty(excelTitle = "SKILL")
     private String skill;
     /**
      * 评价
      */
+    @ExcelProperty(excelTitle = "EVALUATE")
     private String evaluate;
     /**
      * 分数
      */
+    @ExcelProperty(excelTitle = "FRACTION")
     private Long fraction;
 }

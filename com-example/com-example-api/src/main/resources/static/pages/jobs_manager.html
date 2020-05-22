@@ -22,7 +22,7 @@
     <script th:src="@{/static/script/common/bootstrap/js/bootstrap-table-zh-CN.min.js}"></script>
     <script th:src="@{/static/script/common/bootstrap/js/bootstrap-select.min.js}"></script>
     <script th:src="@{/static/script/common/bootstrap/js/bootstrapValidator.min.js}"></script>
-    <script th:src="@{/static/script/common/artDialog/js/dialog.js}"></script>
+    <script th:src="@{/static/script/common/artDialog/js/dialog-plus.js}"></script>
     <script th:src="@{/static/script/common/common.js}"></script>
     <script th:src="@{/static/script/jobs_manager.js}"></script>
 
@@ -73,7 +73,7 @@
     <div class="panel-body">
         <ul>
             <li>① 一个分片则是一个线程，处理一个参数配置下的业务逻辑</li>
-            <li>② 分片数 / 分片参数组合(N>=1)
+            <li>② 分片数 / 分片参数组合(N>=1)，分片参数中不允许带有','，即A,B,C可以是任意规则的参数[使用时按规则解析]，但中间不允许带','[影响分片]，A,B,C中如果有多种业务参数的需求请用'#'拼接[0:A -> 0:bizA=valueA#bizB=valueB]
                 <table style="table-layout:fixed"
                        class="table table-condensed table-bordered table-hover table-striped">
                     <tr>
@@ -172,11 +172,11 @@
 </div>
 
 <div class="modal fade" id="updateJobConfig" backdrop="static" keyboard="false">
-    <div style="width: 600px;height:100px; z-index: 10; position: absolute; text-align: center; left: 40%; top: 20%;margin-left:-100px;margin-top:-10px">
+    <div style="width: 600px;height:100px; z-index: 10; position: absolute; text-align: center; left: 35%; top: 20%;margin-left:-100px;margin-top:-10px">
         　　　　
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <label class="panel-title" style="font-size: 25px;font-family: 'Microsoft YaHei UI';font-weight:bold ">Job配置信息</label>
+                <label class="panel-title" style="font-size: 25px;font-family: 'Microsoft YaHei UI';font-weight:bold ">Job配置信息-编辑</label>
             </div>
 
             <div class="container" style="width: 600px;float: left;background: white;padding-top: 15px;">

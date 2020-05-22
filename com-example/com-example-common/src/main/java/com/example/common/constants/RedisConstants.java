@@ -8,15 +8,24 @@ package com.example.common.constants;
  * @Version 1.0.0.0
  **/
 public interface RedisConstants {
+    /**
+     * 前缀
+     */
+    String PREFIX = "EXAMPLE:";
+
+    /**
+     * 日志
+     */
+    String LOGS = "LOGS:";
 
     /**
      * Job 调度配置map key
      */
-    String SYS_JOB_CONFIG_MAP_KEY = "SYS_JOB_CONFIG_MAP";
+    String SYS_JOB_CONFIG_MAP_KEY = PREFIX + "SYS_JOB_CONFIG_MAP";
 
     /**
-     * 仓库库存分配锁
+     * 基础配置map key
      */
-    String WAREHOUSE_INVENTORY_ALLOCATION_LOCK_KEY = "WAREHOUSE_INVENTORY_ALLOCATION_LOCK_KEY";
+    String SYS_BASE_CONFIG_MAP_KEY = PREFIX + "SYS_BASE_CONFIG_MAP";
 
 }

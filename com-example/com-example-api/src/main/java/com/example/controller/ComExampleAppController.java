@@ -6,6 +6,7 @@ import com.example.domain.entity.UserInfoEntity;
 import com.example.domain.vo.UserInfoVO;
 import com.example.service.business.UserInfoService;
 import com.example.service.rest.example.ExampleRestService;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,12 +15,13 @@ import javax.annotation.Resource;
 import java.util.*;
 
 /**
- * @Description TODO
+ * @Description 小例子
  * @PackagePath com.example.controller.ComExampleAppController
  * @Author YINZHIYU
- * @Date 2020/5/8 13:43
+ * @Date 2020/5/22 11:53
  * @Version 1.0.0.0
  **/
+@Api(tags = "小例子自测-莫搞")
 @RestController
 @RequestMapping(value = "/rest")
 public class ComExampleAppController {

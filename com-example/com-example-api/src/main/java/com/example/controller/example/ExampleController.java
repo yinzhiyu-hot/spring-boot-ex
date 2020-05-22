@@ -9,6 +9,7 @@ import com.dangdang.ddframe.job.lite.api.JobScheduler;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
 import com.example.common.config.JobsConfig;
 import com.example.common.constants.JobsConstants;
+import com.example.common.utils.ExcelUtils;
 import com.example.common.utils.RedisUtils;
 import com.example.common.utils.SpringBootBeanUtil;
 import com.example.domain.common.Result;
@@ -17,10 +18,13 @@ import com.example.domain.vo.UserInfoVO;
 import com.example.service.business.UserInfoService;
 import com.example.service.job.cache.JobsConfigCache;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -34,6 +38,9 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "/rest")
 public class ExampleController {
+
+    @Resource
+    ExcelUtils<UserInfoEntity> excelUtils;
 
     @Resource
     RedisUtils redisUtils;
@@ -386,4 +393,24 @@ public class ExampleController {
                 .build();
 
     }
+
+
+    @ApiOperation(value = "用户信息导出", notes = "平台库存分配导出", httpMethod = "GET")
+    @GetMapping("export")
+    public void export(UserInfoVO userInfoVO, HttpServletResponse response) {
+        try {
+            List<UserInfoEntity> list = userInfoService.list();
+            // 创建excel
+            HSSFWorkbook wk = excelUtils.parseToHSSFWorkbook(list);
+            //弹出下载选择路径框
+            response.setContentType("application/octet-stream");
+            //默认Excel名称
+            response.setHeader("Content-disposition", String.format("attachment;filename=Oms-Data-%s.xls", System.currentTimeMillis()));
+            response.flushBuffer();
+            wk.write(response.getOutputStream());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

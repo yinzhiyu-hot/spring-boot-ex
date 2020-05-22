@@ -3,7 +3,6 @@ package com.example;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @Description 应用入口
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @Version 1.0.0.0
  **/
 @SpringBootApplication
-@EnableTransactionManagement
 @Slf4j
 public class ComExampleAppApplication {
 
@@ -21,7 +19,7 @@ public class ComExampleAppApplication {
         try {
             SpringApplication.run(ComExampleAppApplication.class, args);
         } catch (Exception e) {
-            log.error(String.format("OmsApiApplication ==> SpringApplication.run(ComExampleAppApplication.class, args) ==> 异常：%s", e));
+            log.error(String.format("ComExampleAppApplication ==> SpringApplication.run(ComExampleAppApplication.class, args) ==> 异常：%s", e));
         }
     }
 }

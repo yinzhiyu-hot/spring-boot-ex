@@ -1,5 +1,7 @@
 package com.example.common.utils;
 
+import cn.hutool.core.thread.ThreadUtil;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -146,6 +148,20 @@ public class RedisUtils {
     }
 
     /*
+     * @Description 根据key获取值
+     * [泛型方法，运行时确定返回值，相较于上面get 返回Object需要用户自行强制转换，此处还是优越得多]
+     * [泛型方法的<T> 与 泛型类的<T> 是2个不同的泛型类型]
+     * @Params ==>
+     * @Param key
+     * @Return T
+     * @Date 2020/5/18 10:05
+     * @Auther YINZHIYU
+     */
+    public <T> T getValue(String key) {
+        return key == null ? null : (T) redisTemplate.opsForValue().get(key);
+    }
+
+    /*
      * @Description 将值放入缓存
      * @Params ==>
      * @Param key
@@ -154,7 +170,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:48
      * @Auther YINZHIYU
      */
-    public void set(String key, String value) {
+    public void set(String key, Object value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
@@ -168,7 +184,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:48
      * @Auther YINZHIYU
      */
-    public void set(String key, String value, long time) {
+    public void set(String key, Object value, long time) {
         if (time > 0) {
             redisTemplate.opsForValue().set(key, value, time, TimeUnit.SECONDS);
         } else {
@@ -184,7 +200,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:49
      * @Auther YINZHIYU
      */
-    public void batchSet(Map<String, String> keyAndValue) {
+    public void batchSet(Map<String, Object> keyAndValue) {
         redisTemplate.opsForValue().multiSet(keyAndValue);
     }
 
@@ -196,7 +212,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:49
      * @Auther YINZHIYU
      */
-    public void batchSetIfAbsent(Map<String, String> keyAndValue) {
+    public void batchSetIfAbsent(Map<String, Object> keyAndValue) {
         redisTemplate.opsForValue().multiSetIfAbsent(keyAndValue);
     }
 
@@ -237,7 +253,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:50
      * @Auther YINZHIYU
      */
-    public void sSet(String key, String value) {
+    public void sSet(String key, Object value) {
         redisTemplate.opsForSet().add(key, value);
     }
 
@@ -298,7 +314,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:51
      * @Auther YINZHIYU
      */
-    public long size(String key) {
+    public long sizeForSet(String key) {
         return redisTemplate.opsForSet().size(key);
     }
 
@@ -338,7 +354,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:52
      * @Auther YINZHIYU
      */
-    public boolean move(String key, String value, String destKey) {
+    public boolean move(String key, Object value, String destKey) {
         return redisTemplate.opsForSet().move(key, value, destKey);
     }
 
@@ -368,6 +384,46 @@ public class RedisUtils {
      */
     public void add(String key, Map<String, Object> map) {
         redisTemplate.opsForHash().putAll(key, map);
+    }
+
+    /*
+     * @Description 加入缓存
+     * @Params ==>
+     * @Param key
+     * @Param hashKey
+     * @Param object
+     * @Return void
+     * @Date 2020/5/15 13:58
+     * @Auther YINZHIYU
+     */
+    public void add(String key, Object hashKey, Object object) {
+        redisTemplate.opsForHash().put(key, hashKey, object);
+    }
+
+    /*
+     * @Description 获取缓存
+     * @Params ==>
+     * @Param key
+     * @Param hashKey
+     * @Return java.lang.Object
+     * @Date 2020/5/15 14:00
+     * @Auther YINZHIYU
+     */
+    public Object get(String key, Object hashKey) {
+        return redisTemplate.opsForHash().get(key, hashKey);
+    }
+
+    /*
+     * @Description 获取缓存
+     * @Params ==>
+     * @Param key
+     * @Param hashKey
+     * @Return java.lang.Object
+     * @Date 2020/5/15 14:00
+     * @Auther YINZHIYU
+     */
+    public <T> T getValue(String key, T hashKey) {
+        return key == null ? null : (T) redisTemplate.opsForHash().get(key, hashKey);
     }
 
     /*
@@ -404,21 +460,21 @@ public class RedisUtils {
      * @Date 2020/4/21 9:53
      * @Auther YINZHIYU
      */
-    public String getMapString(String key, String key2) {
-        return redisTemplate.opsForHash().get("map1", "key1").toString();
+    public String getMapString(String key, String hashKey) {
+        return redisTemplate.opsForHash().get(key, hashKey).toString();
     }
 
     /*
      * @Description 获取指定的值Int
      * @Params ==>
      * @Param key
-     * @Param key2
+     * @Param hashKey
      * @Return java.lang.Integer
      * @Date 2020/4/21 9:53
      * @Auther YINZHIYU
      */
-    public Integer getMapInt(String key, String key2) {
-        return (Integer) redisTemplate.opsForHash().get("map1", "key1");
+    public Integer getMapInt(String key, String hashKey) {
+        return (Integer) redisTemplate.opsForHash().get(key, hashKey);
     }
 
     /*
@@ -540,7 +596,7 @@ public class RedisUtils {
      * @Auther YINZHIYU
      */
     public Object index(String key, long index) {
-        return redisTemplate.opsForList().index("list", 1);
+        return redisTemplate.opsForList().index(key, index);
     }
 
     /*
@@ -567,7 +623,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:56
      * @Auther YINZHIYU
      */
-    public void leftPush(String key, String pivot, String value) {
+    public void leftPush(String key, Object pivot, Object value) {
         redisTemplate.opsForList().leftPush(key, pivot, value);
     }
 
@@ -580,7 +636,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:56
      * @Auther YINZHIYU
      */
-    public void leftPushAll(String key, String... values) {
+    public void leftPushAll(String key, Object... values) {
 //        redisTemplate.opsForList().leftPushAll(key,"w","x","y");
         redisTemplate.opsForList().leftPushAll(key, values);
     }
@@ -594,7 +650,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:57
      * @Auther YINZHIYU
      */
-    public void leftPushAll(String key, String value) {
+    public void leftPushAll(String key, Object value) {
         redisTemplate.opsForList().rightPush(key, value);
     }
 
@@ -607,7 +663,7 @@ public class RedisUtils {
      * @Date 2020/4/21 9:57
      * @Auther YINZHIYU
      */
-    public void rightPushAll(String key, String... values) {
+    public void rightPushAll(String key, Object... values) {
 //        redisTemplate.opsForList().leftPushAll(key,"w","x","y");
         redisTemplate.opsForList().rightPushAll(key, values);
     }
@@ -687,5 +743,78 @@ public class RedisUtils {
      */
     public void rightPop(String key, long timeout, TimeUnit unit) {
         redisTemplate.opsForList().rightPop(key, timeout, unit);
+    }
+
+    /*
+     * @Description 获取变量中值的长度
+     * @Params ==>
+     * @Param key
+     * @Return long
+     * @Date 2020/4/21 9:51
+     * @Auther YINZHIYU
+     */
+    public long sizeForList(String key) {
+        return redisTemplate.opsForList().size(key);
+    }
+
+    /*
+     * @Description  Redis 记录日志，默认保留5天
+     * @Params ==>
+     * @Param key
+     * @Param value
+     * @Param days
+     * @Return void
+     * @Date 2020/5/15 11:45
+     * @Auther YINZHIYU
+     */
+    public void recordLogs(String key, Object value, final Integer days) {
+        ThreadUtil.execAsync(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    rightPushAll(key, value);
+                    if (days == null || days <= 0) {
+                        expire(key, 5 * 24 * 3600);
+                    } else {
+                        expire(key, days * 24 * 3600);
+                    }
+                } catch (Exception e) {
+                    log.error(String.format("RedisUtils ==> recordLogs(String key, Object value, final Integer days) ==> 操作Redis ==> 异常：%s", e));
+                }
+            }
+        });
+    }
+
+    /*
+     * @Description  Redis 记录日志，默认保留5天
+     * @Params ==>
+     * @Param key
+     * @Param value
+     * @Param days
+     * @Return void
+     * @Date 2020/5/15 11:45
+     * @Auther YINZHIYU
+     */
+    public void recordLogs(String key, String hashKey, Object value, final Integer days) {
+        ThreadUtil.execAsync(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    List list = (List) get(key, hashKey);
+                    if (list == null || list.size() <= 0) {
+                        list = Lists.newArrayList();
+                    }
+                    list.add(value);
+                    add(key, hashKey, list);
+                    if (days == null || days <= 0) {
+                        expire(key, 5 * 24 * 3600);
+                    } else {
+                        expire(key, days * 24 * 3600);
+                    }
+                } catch (Exception e) {
+                    log.error(String.format("RedisUtils ==> recordLogs(String key, String hashKey, Object value, Integer days) ==> 操作Redis ==> 异常：%s", e));
+                }
+            }
+        });
     }
 }

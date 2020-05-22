@@ -9,10 +9,10 @@ import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
 
 /**
- * @Description 系统启动中加载jobs配置, 且初始化job
+ * @Description 系统启动中加载各种全局配置
  * @PackagePath com.example.service.job.cache.AppCacheConfig
  * @Author YINZHIYU
- * @Date 2020/5/8 14:14
+ * @Date 2020/5/22 11:46
  * @Version 1.0.0.0
  **/
 @Slf4j
@@ -35,9 +35,10 @@ public class AppCacheConfig {
     public void init() {
         log.info("系统启动中");
 
-        //初始化job配置
+        //初始化Job配置
         jobsConfigCache.init();
 
+        //初始化基础配置
         sysBaseConfigCache.init();
     }
 

@@ -26,7 +26,7 @@ public interface BaseConstants {
     /**
      * 系统的redis前缀
      */
-    String REDIS_PREFIX = "oms:";
+    String REDIS_PREFIX = "example:";
 
 
     Integer LOG_LEN = 100;

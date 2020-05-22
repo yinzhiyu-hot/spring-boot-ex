@@ -16,7 +16,6 @@ import java.io.Serializable;
 @ApiModel(description = "响应结果")
 @Data
 public class Result<T> implements Serializable {
-
     @ApiModelProperty(value = "成功与否")
     private Boolean success;
     @ApiModelProperty(value = "返回码(成功标记=0，失败标记=1)")
@@ -54,7 +53,7 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> fail(String fail) {
         Result<T> result = new Result<>();
-        result.code = 0;
+        result.code = 1;
         result.success = false;
         result.msg = "处理失败";
         result.error = fail;

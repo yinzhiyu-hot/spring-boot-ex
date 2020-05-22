@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 
 /**
- * @Description TODO
+ * @Description 基础JOB
  * @PackagePath BaseSimpleJob
  * @Author YINZHIYU
  * @Date 2020-04-14 14:07:00
@@ -43,7 +43,7 @@ public abstract class BaseSimpleJob implements SimpleJob {
 //            if (StringUtils.notBlank(shardingContext.getShardingParameter())) {
             executeJob(shardingContext);
 //            } else {
-//                log.info(String.format("---> [%s]Thread ID: %s, Job 无工作参数，放弃本次工作。", radomStr, Thread.currentThread().getId()));
+//                log.info(String.format("==> [%s]Thread ID: %s, Job 无工作参数，放弃本次工作。", radomStr, Thread.currentThread().getId()));
 //            }
 
             // 程序结束时间
@@ -55,7 +55,7 @@ public abstract class BaseSimpleJob implements SimpleJob {
             log.info(String.format("==> [%s]Thread ID: %s, Job 结束工作，执行耗时 %s ms。", radomStr, Thread.currentThread().getId(), millis));
 
         } catch (Exception e) {
-            log.error(String.format("==> [%s]Thread ID: %s, Job 工作异常 ---> %s", radomStr, Thread.currentThread().getId(), e));
+            log.error(String.format("==> [%s]Thread ID: %s, Job 工作异常 ==> %s", radomStr, Thread.currentThread().getId(), e));
         }
     }
 }

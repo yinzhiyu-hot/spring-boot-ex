@@ -44,34 +44,35 @@ public class TasksManagerCenterController {
     @Resource
     private SyncTaskDataService syncTaskDataService;
 
-    @ApiOperation(value = "Task任务信息分页", notes = "Task任务信息分页", httpMethod = "GET")
+    @ApiOperation(value = "Task任务页面", notes = "Task任务页面", httpMethod = "GET")
     @RequestMapping(value = "/pages")
     public String pages() {
         return "tasks_manager";
     }
 
-    @ApiOperation(value = "列表", notes = "列表", httpMethod = "GET")
+    @ApiOperation(value = "Task任务信息分页", notes = "Task任务信息分页", httpMethod = "GET")
     @RequestMapping(value = "/listPage")
     @ResponseBody
     public Map<String, Object> listPage(@ApiParam(name = "分页", required = true) BasePageVO basePageVO, @ApiParam(name = "任务信息", required = true) SyncTask syncTask) {
         Page<SyncTask> page = new Page<SyncTask>(basePageVO.getPageNumber(), basePageVO.getPageSize());
         QueryWrapper<SyncTask> queryWrapper = new QueryWrapper<SyncTask>();
         if (ObjectUtil.isNotEmpty(syncTask.getTaskStatus())) {
-            queryWrapper.eq("task_status", syncTask.getTaskStatus());
+            queryWrapper.eq(SyncTask.COL_TASK_STATUS, syncTask.getTaskStatus());
         }
         if (StringUtils.notBlank(syncTask.getTaskType())) {
-            queryWrapper.eq("task_type", syncTask.getTaskType());
+            queryWrapper.eq(SyncTask.COL_TASK_TYPE, syncTask.getTaskType());
         }
         if (StringUtils.notBlank(syncTask.getTaskDesc())) {
-            queryWrapper.like("task_desc", syncTask.getTaskDesc());
+            queryWrapper.like(SyncTask.COL_TASK_DESC, syncTask.getTaskDesc());
         }
+        queryWrapper.orderByDesc(SyncTask.COL_ID);
         IPage<SyncTask> pages = syncTaskService.getBaseMapper().selectPage(page, queryWrapper);
 
         List<SyncTask> taskList = pages.getRecords();
         if (ObjectUtil.isNotEmpty(taskList)) {
             taskList.forEach(item -> {
                 QueryWrapper<SyncTaskData> query = new QueryWrapper<SyncTaskData>();
-                query.eq("task_id", item.getId());
+                query.eq(SyncTaskData.COL_TASK_ID, item.getId());
                 List<SyncTaskData> dataList = syncTaskDataService.list(query);
                 item.setSyncTaskDataList(dataList);
                 System.out.println(item.getTaskData());
@@ -90,7 +91,7 @@ public class TasksManagerCenterController {
      * @Description 重置
      * @Params ==>
      * @Param sysJobConfig
-     * @Return Result
+     * @Return cn.wangoon.domain.common.Result
      * @Date 2020/4/27 18:05
      * @Auther YINZHIYU
      */

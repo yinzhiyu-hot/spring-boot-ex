@@ -28,15 +28,15 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("cn.wangoon.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.example.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Oms RESTful APIs")
-                .description("Oms")
+                .title("Example RESTful APIs")
+                .description("Example")
                 .termsOfServiceUrl("http://localhost:8082/")
                 .version("1.0")
                 .build();

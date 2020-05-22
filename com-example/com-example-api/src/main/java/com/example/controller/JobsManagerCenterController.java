@@ -8,7 +8,6 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.dangdang.ddframe.job.config.JobCoreConfiguration;
 import com.dangdang.ddframe.job.config.simple.SimpleJobConfiguration;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
-import com.example.common.constants.JobsConstants;
 import com.example.common.constants.RedisConstants;
 import com.example.common.enums.JobStatusEnum;
 import com.example.common.utils.NetUtils;
@@ -23,6 +22,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -46,6 +46,8 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/jobs")
 public class JobsManagerCenterController {
+    @Resource
+    Environment environment;
 
     @Resource
     RedisUtils redisUtils;
@@ -53,22 +55,22 @@ public class JobsManagerCenterController {
     @Resource
     private SysJobConfigService sysJobConfigService;
 
-    @ApiOperation(value = "Job配置信息分页", notes = "Job配置信息分页", httpMethod = "GET")
+    @ApiOperation(value = "Job配置页面", notes = "Job配置页面", httpMethod = "GET")
     @RequestMapping(value = "/pages")
     public String pages() {
         return "jobs_manager";
     }
 
-    @ApiOperation(value = "列表", notes = "列表", httpMethod = "GET")
+    @ApiOperation(value = "Job配置信息分页", notes = "Job配置信息分页", httpMethod = "GET")
     @RequestMapping(value = "/listPage")
     @ResponseBody
     public Map<String, Object> listPage(@ApiParam(name = "分页", required = true) BasePageVO basePageVO, @ApiParam(name = "Job配置", required = true) SysJobConfig sysJobConfig) {
         Page<SysJobConfig> page = new Page<SysJobConfig>(basePageVO.getPageNumber(), basePageVO.getPageSize());
         QueryWrapper<SysJobConfig> queryWrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotEmpty(sysJobConfig.getJobStatus())) {
-            queryWrapper.eq("job_status", sysJobConfig.getJobStatus());
+            queryWrapper.eq(SysJobConfig.COL_JOB_STATUS, sysJobConfig.getJobStatus());
         }
-        queryWrapper.notIn("job_class_bean_name", JobsConstants.HEART_JOB_CLASS_BEAN_NAME);//过滤掉心跳监控，心跳监控不可进行管理
+        //queryWrapper.notIn(SysJobConfig.COL_JOB_CLASS_BEAN_NAME, JobsConstants.HEART_JOB_CLASS_BEAN_NAME);//过滤掉心跳监控，心跳监控不可进行管理
 
         IPage<SysJobConfig> pages = sysJobConfigService.getBaseMapper().selectPage(page, queryWrapper);
         //bootstrap-table要求服务器返回的json须包含：total，rows
@@ -82,7 +84,7 @@ public class JobsManagerCenterController {
      * @Description 启动
      * @Params ==>
      * @Param sysJobConfig
-     * @Return Result
+     * @Return cn.wangoon.domain.common.Result
      * @Date 2020/4/27 18:05
      * @Auther YINZHIYU
      */
@@ -108,11 +110,11 @@ public class JobsManagerCenterController {
 
             try {
                 //获取Redis JOB 调度配置
-                Map<String, SysJobConfig> sysJobConfigMapRedis = (Map<String, SysJobConfig>) redisUtils.get(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);//取Redis 调度配置map
+                Map<String, SysJobConfig> sysJobConfigMapRedis = redisUtils.getValue(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);//取Redis 调度配置map
 
                 //更新Redis
                 sysJobConfigMapRedis.put(sysJobConfigLocal.getJobClassBeanName(), sysJobConfigLocal);
-                redisUtils.redisTemplate.opsForValue().set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
+                redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
             } catch (Exception e) {
                 log.error(String.format("JobsManagerCenterController ==> start ==> 操作Redis ==> 异常：%s", e));
             }
@@ -127,7 +129,7 @@ public class JobsManagerCenterController {
      * @Description JOB 停止
      * @Params ==>
      * @Param sysJobConfig
-     * @Return Result
+     * @Return cn.wangoon.domain.common.Result
      * @Date 2020/4/27 18:05
      * @Auther YINZHIYU
      */
@@ -152,11 +154,11 @@ public class JobsManagerCenterController {
 
             try {
                 //获取Redis JOB 调度配置
-                Map<String, SysJobConfig> sysJobConfigMapRedis = (Map<String, SysJobConfig>) redisUtils.get(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);//取Redis 调度配置map
+                Map<String, SysJobConfig> sysJobConfigMapRedis = redisUtils.getValue(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);//取Redis 调度配置map
 
                 //更新Redis
                 sysJobConfigMapRedis.put(sysJobConfigLocal.getJobClassBeanName(), sysJobConfigLocal);
-                redisUtils.redisTemplate.opsForValue().set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
+                redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
             } catch (Exception e) {
                 log.error(String.format("JobsManagerCenterController ==> stop ==> 操作Redis ==> 异常：%s", e));
             }
@@ -171,7 +173,7 @@ public class JobsManagerCenterController {
      * @Description JOB 更新
      * @Params ==>
      * @Param sysJobConfig
-     * @Return Result
+     * @Return cn.wangoon.domain.common.Result
      * @Date 2020/4/27 18:05
      * @Auther YINZHIYU
      */
@@ -182,7 +184,7 @@ public class JobsManagerCenterController {
 
         try {
             sysJobConfig.setUpdateFlag(true);
-            sysJobConfig.setUpdateIp(NetUtils.getLocalIP());
+            sysJobConfig.setUpdateIpPort(getLocalIpPort());
 
             //更新调度配置信息
             SimpleJob syncTaskJob = (SimpleJob) SpringBootBeanUtil.getBean(sysJobConfig.getJobClassBeanName());
@@ -198,11 +200,11 @@ public class JobsManagerCenterController {
 
             try {
                 //获取Redis JOB 调度配置
-                Map<String, SysJobConfig> sysJobConfigMapRedis = (Map<String, SysJobConfig>) redisUtils.get(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);//取Redis 调度配置map
+                Map<String, SysJobConfig> sysJobConfigMapRedis = redisUtils.getValue(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);//取Redis 调度配置map
 
                 //更新Redis
                 sysJobConfigMapRedis.put(sysJobConfig.getJobClassBeanName(), sysJobConfig);
-                redisUtils.redisTemplate.opsForValue().set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
+                redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
             } catch (Exception e) {
                 log.error(String.format("JobsManagerCenterController ==> update ==> 操作Redis ==> 异常：%s", e));
             }
@@ -224,24 +226,33 @@ public class JobsManagerCenterController {
      * @Date 2020/4/27 18:04
      * @Auther YINZHIYU
      */
-    private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass,
-                                                         final String cron,
-                                                         final int shardingTotalCount,
-                                                         final String shardingItemParameters) {
-
-
-        return LiteJobConfiguration
-                .newBuilder(
-                        new SimpleJobConfiguration(
-                                JobCoreConfiguration.newBuilder(
-                                        jobClass.getName(), cron, shardingTotalCount)
-                                        .shardingItemParameters(shardingItemParameters)
-                                        .build()
-                                , jobClass.getCanonicalName()
-                        )
+    private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass, final String cron, final int shardingTotalCount, final String shardingItemParameters) {
+        return LiteJobConfiguration.newBuilder(
+                new SimpleJobConfiguration(
+                        JobCoreConfiguration.newBuilder(jobClass.getName(), cron, shardingTotalCount).shardingItemParameters(shardingItemParameters).build(), jobClass.getCanonicalName()
                 )
-                .overwrite(true)
-                .build();
+        ).overwrite(true).build();
+    }
 
+    /*
+     * @Description 获取Ip+端口
+     * @Params ==>
+     * @Return java.lang.String
+     * @Date 2020/5/22 10:13
+     * @Auther YINZHIYU
+     */
+    private String getLocalIpPort() {
+        return String.format("%s:%s", NetUtils.getLocalIP(), getLocalPort());
+    }
+
+    /*
+     * @Description 获取应用端口
+     * @Params ==>
+     * @Return java.lang.String
+     * @Date 2020/5/22 10:11
+     * @Auther YINZHIYU
+     */
+    private String getLocalPort() {
+        return environment.getProperty("local.server.port");
     }
 }

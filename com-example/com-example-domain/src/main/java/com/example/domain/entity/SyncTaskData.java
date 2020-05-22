@@ -43,4 +43,12 @@ public class SyncTaskData implements Serializable {
      */
     @TableField("data_index")
     private Integer dataIndex;
+
+    public static final String COL_ID = "id";
+
+    public static final String COL_TASK_ID = "task_id";
+
+    public static final String COL_TASK_DATA = "task_data";
+
+    public static final String COL_DATA_INDEX = "data_index";
 }
