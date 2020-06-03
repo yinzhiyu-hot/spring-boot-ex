@@ -1,5 +1,6 @@
 package com.example.common.utils;
 
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
 
 import java.text.DateFormat;
@@ -16,6 +17,9 @@ import java.util.*;
  **/
 public class DateUtils {
 
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat(DatePattern.NORM_DATE_PATTERN);
+    private static SimpleDateFormat dateTimeFormat = new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN);
+
     /*
      * @Description 根据时区对应的本地时间获取UTC时间
      * @Params ==>
@@ -27,7 +31,7 @@ public class DateUtils {
     public static String getUTCTimeStrByTimeZone(TimeZone timeZone) {
         Calendar cal = Calendar.getInstance(timeZone);
 
-        return localToUTC(cal.getTime(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        return localToUTC(cal.getTime(), dateTimeFormat);
     }
 
     /*
@@ -40,7 +44,7 @@ public class DateUtils {
      */
     public static String getUTCTimeStrByLocale(Locale locale) {
         Calendar usCal = Calendar.getInstance(locale);
-        return localToUTC(usCal.getTime(), new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        return localToUTC(usCal.getTime(), dateTimeFormat);
     }
 
     /*
@@ -55,11 +59,10 @@ public class DateUtils {
     public static String getUTCTimeStrByLocaleOffset(Locale locale, int offset) {
         String utcOffsetDate;
 
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         try {
-            Date utcDate = format.parse(DateUtils.getUTCTimeStrByLocale(locale));
+            Date utcDate = dateFormat.parse(DateUtils.getUTCTimeStrByLocale(locale));
             Date offsetDate = DateUtil.offsetDay(utcDate, offset);
-            utcOffsetDate = format.format(offsetDate);
+            utcOffsetDate = dateFormat.format(offsetDate);
         } catch (ParseException e) {
             utcOffsetDate = "";
         }
@@ -74,9 +77,7 @@ public class DateUtils {
      * @Auther YINZHIYU
      */
     public static String getUTCDateStr() {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-
-        StringBuffer utcDateBuffer = new StringBuffer();
+        StringBuilder utcDateBuffer = new StringBuilder();
         // 1、取得本地时间：
         Calendar cal = Calendar.getInstance();
         // 2、取得时间偏移量：
@@ -90,7 +91,7 @@ public class DateUtils {
         int day = cal.get(Calendar.DAY_OF_MONTH);
         utcDateBuffer.append(year).append("-").append(month).append("-").append(day);
         try {
-            format.parse(utcDateBuffer.toString());
+            dateFormat.parse(utcDateBuffer.toString());
             return utcDateBuffer.toString();
         } catch (ParseException e) {
             e.printStackTrace();
@@ -138,25 +139,23 @@ public class DateUtils {
      * @Auther YINZHIYU
      */
     public static String utcToLocal(Date utc) {
-        /*创建格式化时间对象simpleDateFormat，并初始化格式yyyy-MM-dd HH:mm:ss*/
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         /*创建时区对象utcZone，获取utc所在的时区*/
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date utcDate = null;
         try {
-            utcDate = sdf.parse(sdf.format(utc));
+            utcDate = dateTimeFormat.parse(dateTimeFormat.format(utc));
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf.setTimeZone(TimeZone.getDefault());
+        dateTimeFormat.setTimeZone(TimeZone.getDefault());
         Date locatlDate = null;
-        String localTime = sdf.format(utcDate.getTime());
+        String localTime = dateTimeFormat.format(utcDate.getTime());
         try {
-            locatlDate = sdf.parse(localTime);
+            locatlDate = dateTimeFormat.parse(localTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return sdf.format(locatlDate);
+        return dateTimeFormat.format(locatlDate);
     }
 
     /*
@@ -168,11 +167,9 @@ public class DateUtils {
      * @Auther YINZHIYU
      */
     public static String localToUTC(String localTime) {
-        /*创建格式化时间对象simpleDateFormat，并初始化格式yyyy-MM-dd HH:mm:ss*/
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date localDate = null;
         try {
-            localDate = sdf.parse(localTime);
+            localDate = dateTimeFormat.parse(localTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -188,7 +185,7 @@ public class DateUtils {
         calendar.add(java.util.Calendar.MILLISECOND, -(zoneOffset + dstOffset));
         /* 取得的时间就是UTC标准时间 */
         Date utcDate = new Date(calendar.getTimeInMillis());
-        return sdf.format(utcDate);
+        return dateTimeFormat.format(utcDate);
     }
 
     /*
@@ -200,25 +197,23 @@ public class DateUtils {
      * @Auther YINZHIYU
      */
     public static String utcToLocal(String utcTime) {
-        /*创建格式化时间对象simpleDateFormat，并初始化格式yyyy-MM-dd HH:mm:ss*/
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         /*创建时区对象utcZone，获取utc所在的时区*/
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        dateTimeFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         Date utcDate = null;
         try {
-            utcDate = sdf.parse(utcTime);
+            utcDate = dateTimeFormat.parse(utcTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        sdf.setTimeZone(TimeZone.getDefault());
+        dateTimeFormat.setTimeZone(TimeZone.getDefault());
         Date locatlDate = null;
-        String localTime = sdf.format(utcDate.getTime());
+        String localTime = dateTimeFormat.format(utcDate.getTime());
         try {
-            locatlDate = sdf.parse(localTime);
+            locatlDate = dateTimeFormat.parse(localTime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return sdf.format(locatlDate);
+        return dateTimeFormat.format(locatlDate);
     }
 
     /*
@@ -243,8 +238,7 @@ public class DateUtils {
             timeZone = new SimpleTimeZone(newTime, ids[0]);
         }
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        sdf.setTimeZone(timeZone);
-        return sdf.format(new Date());
+        dateTimeFormat.setTimeZone(timeZone);
+        return dateTimeFormat.format(new Date());
     }
 }
