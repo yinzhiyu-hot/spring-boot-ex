@@ -1,12 +1,14 @@
 package com.example.common.utils;
 
 import cn.hutool.core.thread.ThreadUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -37,7 +39,7 @@ public class RedisUtils {
      */
     public boolean setLock(String key, String value) {
         try {
-            if (redisTemplate.opsForValue().setIfAbsent(key, value)) { // 对应setnx命令
+            if (redisTemplate.opsForValue().setIfAbsent(key, value)) { // 对应setnx命令，如果键不存在则新增,存在则不改变已经有的值。
                 //可以成功设置,也就是key不存在
                 return true;
             }
@@ -45,14 +47,14 @@ public class RedisUtils {
             String currentValue = (String) redisTemplate.opsForValue().get(key);
             // 如果锁过期
             // currentValue 不为空且小于当前时间
-            if (StringUtils.notBlank(currentValue) && Long.parseLong(currentValue) < System.currentTimeMillis()) {
+            if (ObjectUtil.isNotEmpty(currentValue) && Long.parseLong(currentValue) < System.currentTimeMillis()) {
                 // 获取上一个锁的时间value
                 // 对应getset，如果key存在返回当前key的值，并重新设置新的值
                 // redis是单线程处理，即使并发存在，这里的getAndSet也是单个执行
                 // 所以，加上下面的 !StringUtils.isEmpty(oldValue) && oldValue.equals(currentValue)
                 // 就能轻松解决并发问题
                 String oldValue = (String) redisTemplate.opsForValue().getAndSet(key, value);
-                return StringUtils.notBlank(oldValue) && oldValue.equals(currentValue);
+                return ObjectUtil.isNotEmpty(oldValue) && oldValue.equals(currentValue);
             }
         } catch (Exception e) {
             log.error(String.format("RedisUtils ==> setLock ==> 操作Redis ==> 异常：%s", e));
@@ -73,7 +75,7 @@ public class RedisUtils {
     public boolean releaseLock(String key, String value) {
         try {
             String currentValue = (String) redisTemplate.opsForValue().get(key);
-            if (StringUtils.notBlank(currentValue) && currentValue.equals(value)) {
+            if (ObjectUtil.isNotEmpty(currentValue) && currentValue.equals(value)) {
                 return redisTemplate.opsForValue().getOperations().delete(key);// 删除key
             }
         } catch (Exception e) {
@@ -95,6 +97,33 @@ public class RedisUtils {
      */
     public boolean expire(String key, long time) {
         return redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    }
+
+    /*
+     * @Description 给一个指定的 key 值附加过期时间
+     * @Params ==>
+     * @Param key
+     * @Param time
+     * @Param timeUnit[秒/分/时]
+     * @Return boolean
+     * @Date 2020/5/26 18:42
+     * @Auther YINZHIYU
+     */
+    public boolean expire(String key, long time, TimeUnit timeUnit) {
+        return redisTemplate.expire(key, time, timeUnit);
+    }
+
+    /*
+     * @Description 给一个指定的 key 值附加过期时间
+     * @Params ==>
+     * @Param key
+     * @Param date
+     * @Return boolean
+     * @Date 2020/5/26 18:41
+     * @Auther YINZHIYU
+     */
+    public boolean expireAt(String key, Date date) {
+        return redisTemplate.expireAt(key, date);
     }
 
     /*
@@ -422,7 +451,20 @@ public class RedisUtils {
      * @Date 2020/5/15 14:00
      * @Auther YINZHIYU
      */
-    public <T> T getValue(String key, T hashKey) {
+    public <T> T getValues(String key) {
+        return (T) redisTemplate.opsForHash().values(key);
+    }
+
+    /*
+     * @Description 获取缓存
+     * @Params ==>
+     * @Param key
+     * @Param hashKey
+     * @Return java.lang.Object
+     * @Date 2020/5/15 14:00
+     * @Auther YINZHIYU
+     */
+    public <T> T getValue(String key, Object hashKey) {
         return key == null ? null : (T) redisTemplate.opsForHash().get(key, hashKey);
     }
 

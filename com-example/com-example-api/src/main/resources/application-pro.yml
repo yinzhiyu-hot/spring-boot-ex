@@ -47,4 +47,14 @@ rest:
 #日志配置
 logging:
   level:
-    cn.wangoon.*: debug
+    cn.wangoon.*: info
+
+#Swagger的Basic认证配置
+swagger:
+  basic:
+    #Swagger的Basic认证
+    enable: true
+    ## Basic认证用户名
+    username: wangoon
+    ## Basic认证密码
+    password: wangoon2020

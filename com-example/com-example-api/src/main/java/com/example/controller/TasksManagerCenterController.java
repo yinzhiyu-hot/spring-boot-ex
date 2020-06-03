@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.example.common.enums.SyncTaskStatusEnum;
-import com.example.common.utils.StringUtils;
 import com.example.domain.common.Result;
 import com.example.domain.entity.SyncTask;
 import com.example.domain.entity.SyncTaskData;
@@ -30,7 +29,7 @@ import java.util.Map;
  * @Description Task 管理中心
  * @PackagePath com.example.controller.TasksManagerCenterController
  * @Author YINZHIYU
- * @Date 2020/5/8 13:44
+ * @Date 2020/6/3 15:55
  * @Version 1.0.0.0
  **/
 @Api(tags = "Task 管理中心")
@@ -59,10 +58,10 @@ public class TasksManagerCenterController {
         if (ObjectUtil.isNotEmpty(syncTask.getTaskStatus())) {
             queryWrapper.eq(SyncTask.COL_TASK_STATUS, syncTask.getTaskStatus());
         }
-        if (StringUtils.notBlank(syncTask.getTaskType())) {
+        if (ObjectUtil.isNotEmpty(syncTask.getTaskType())) {
             queryWrapper.eq(SyncTask.COL_TASK_TYPE, syncTask.getTaskType());
         }
-        if (StringUtils.notBlank(syncTask.getTaskDesc())) {
+        if (ObjectUtil.isNotEmpty(syncTask.getTaskDesc())) {
             queryWrapper.like(SyncTask.COL_TASK_DESC, syncTask.getTaskDesc());
         }
         queryWrapper.orderByDesc(SyncTask.COL_ID);
@@ -86,13 +85,12 @@ public class TasksManagerCenterController {
         return map;
     }
 
-
     /*
      * @Description 重置
      * @Params ==>
-     * @Param sysJobConfig
-     * @Return cn.wangoon.domain.common.Result
-     * @Date 2020/4/27 18:05
+     * @Param syncTask
+     * @Return com.example.domain.common.Result
+     * @Date 2020/6/3 15:55
      * @Auther YINZHIYU
      */
     @ApiOperation(value = "重置", notes = "重置", httpMethod = "POST")

@@ -112,12 +112,11 @@ public class ExampleSyncTaskJob extends BaseSimpleJob {
                 syncTask.setTaskStatus(SyncTaskStatusEnum.EXCEPTION.getTaskStatus());
                 syncTaskService.updateById(syncTask);
 
+                String exStr = String.format("ExampleSyncTaskJob ==> execute ==> 任务处理异常：%s", ex);
                 SyncTaskException syncTaskException = new SyncTaskException();
                 syncTaskException.setTaskId(syncTask.getId());
-                syncTaskException.setTaskException(ex.toString().length() > 2000 ? ex.toString().substring(0, 2000) : ex.toString());
+                syncTaskException.setTaskException(exStr.length() > 2000 ? exStr.substring(0, 2000) : exStr);
                 syncTaskExceptionService.getBaseMapper().insert(syncTaskException);
-
-                log.error("ExampleSyncTaskJob -> execute -> 任务处理异常 -> " + ex);
             }
         }
     }

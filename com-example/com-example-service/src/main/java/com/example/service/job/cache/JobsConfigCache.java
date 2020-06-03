@@ -1,5 +1,6 @@
 package com.example.service.job.cache;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.dangdang.ddframe.job.lite.api.JobScheduler;
@@ -8,6 +9,7 @@ import com.example.common.constants.RedisConstants;
 import com.example.common.enums.JobStatusEnum;
 import com.example.common.utils.RedisUtils;
 import com.example.common.utils.SpringBootBeanUtil;
+import com.example.domain.dto.RedisLogDto;
 import com.example.domain.entity.SysJobConfig;
 import com.example.service.business.SysJobConfigService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,13 +38,13 @@ public class JobsConfigCache implements BaseCache {
      * Job 调度map，便于管理启停
      * KEY -> BeanName  Value JobScheduler
      */
-    public final static Map<String, JobScheduler> jobSchedulerMap = new HashMap<String, JobScheduler>();
+    public final static Map<String, JobScheduler> jobSchedulerMap = new HashMap<>();
 
     /**
      * Job 调度配置map，便于管理状态
      * KEY -> BeanName  Value SysJobConfig
      */
-    public final static Map<String, SysJobConfig> sysJobConfigMap = new HashMap<String, SysJobConfig>();
+    public final static Map<String, SysJobConfig> sysJobConfigMap = new HashMap<>();
 
     @Resource
     JobsConfig jobsConfig;
@@ -102,6 +104,9 @@ public class JobsConfigCache implements BaseCache {
 
         try {
             redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMap);
+            redisUtils.recordLogs(RedisConstants.SYS_LOGS + DateUtil.format(DateUtil.date(), RedisConstants.LOGS_FORMAT), "startJobs",
+                    new RedisLogDto("JobsConfigCache ==> startJobs ==> 操作Redis ==> 存储"),
+                    RedisConstants.LOGS_EXPIRE_DAYS);
         } catch (Exception e) {
             log.error(String.format("JobsConfigCache ==> startJobs ==> 操作Redis ==> 异常：%s", e));
         }

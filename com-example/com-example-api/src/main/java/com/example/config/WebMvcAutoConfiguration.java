@@ -1,20 +1,15 @@
 package com.example.config;
 
+import com.example.common.utils.SpringBootBeanUtil;
+import com.example.interceptor.ContextInterceptor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.spring.web.SpringfoxWebMvcConfiguration;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import static com.example.common.constants.BaseConstants.USERINFO_HEADER;
 
 /**
  * @Description
@@ -28,25 +23,13 @@ import static com.example.common.constants.BaseConstants.USERINFO_HEADER;
 @ConditionalOnClass(SpringfoxWebMvcConfiguration.class)
 public class WebMvcAutoConfiguration implements WebMvcConfigurer {
     /**
-     * 获取header中的信息
+     * 拦截器组
+     *
+     * @param registry
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-
-        registry.addInterceptor(new HandlerInterceptor() {
-            @Override
-            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-                String userinfo = request.getHeader(USERINFO_HEADER);
-                log.debug("拦截器获取Header中的userinfo信息为: {}", userinfo);
-
-                return true;
-            }
-
-            @Override
-            public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-
-            }
-        });
+        registry.addInterceptor(SpringBootBeanUtil.getBean(ContextInterceptor.class));
     }
 
     /**
@@ -56,11 +39,14 @@ public class WebMvcAutoConfiguration implements WebMvcConfigurer {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/**").addResourceLocations("classpath:/resources/")
-                .addResourceLocations("classpath:/static/**").addResourceLocations("classpath:/public/");
+        registry.addResourceHandler("/**")
+                .addResourceLocations("classpath:/resources/")
+                .addResourceLocations("classpath:/static/**").
+                addResourceLocations("classpath:/public/");
         registry.addResourceHandler("swagger-ui.html", "doc.html")
                 .addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("classpath:/META-INF/resources/webjars/");
     }
 
     @Override

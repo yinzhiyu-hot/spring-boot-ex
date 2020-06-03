@@ -13,5 +13,5 @@ public interface JobsConstants {
      */
     String SHARDING_PARAM_TASK_TYPE = "taskType";
 
-    String HEART_JOB_CLASS_BEAN_NAME = "HeartStatusJob";
+    String SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME = "SystemListenerJob";
 }

@@ -26,6 +26,11 @@ function initTable() {
                 formatter: function (value, row, index) {
                     return index + 1;
                 }
+            }, {
+                field: 'id',
+                title: '任务id',
+                width: 100,
+                align: "left"
             },
             {
                 field: 'taskType',

@@ -70,7 +70,6 @@ public class JobsManagerCenterController {
         if (ObjectUtil.isNotEmpty(sysJobConfig.getJobStatus())) {
             queryWrapper.eq(SysJobConfig.COL_JOB_STATUS, sysJobConfig.getJobStatus());
         }
-        //queryWrapper.notIn(SysJobConfig.COL_JOB_CLASS_BEAN_NAME, JobsConstants.HEART_JOB_CLASS_BEAN_NAME);//过滤掉心跳监控，心跳监控不可进行管理
 
         IPage<SysJobConfig> pages = sysJobConfigService.getBaseMapper().selectPage(page, queryWrapper);
         //bootstrap-table要求服务器返回的json须包含：total，rows

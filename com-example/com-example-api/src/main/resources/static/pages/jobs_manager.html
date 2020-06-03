@@ -73,22 +73,22 @@
     <div class="panel-body">
         <ul>
             <li>① 一个分片则是一个线程，处理一个参数配置下的业务逻辑</li>
-            <li>② 分片数 / 分片参数组合(N>=1)，分片参数中不允许带有','，即A,B,C可以是任意规则的参数[使用时按规则解析]，但中间不允许带','[影响分片]，A,B,C中如果有多种业务参数的需求请用'#'拼接[0:A -> 0:bizA=valueA#bizB=valueB]
+            <li>② 分片数 / 分片参数组合(N>=1)，分片参数中不允许带有','，即A,B,C可以是任意规则的参数[使用时按规则解析]，但中间不允许带','[影响分片]，A,B,C中如果有多种业务参数的需求请用'#'拼接[0:A ->0:bizA=valueA#bizB=valueB]
                 <table style="table-layout:fixed"
                        class="table table-condensed table-bordered table-hover table-striped">
                     <tr>
                         <td width="200">分片数 > 分片参数数量</td>
-                        <td width="100" align="center">[1,N] / N - 1</td>
+                        <td width="100" align="left">[1,N] / N - 1</td>
                         <td>配置的分片数大于分片参数数量[ex: 2 / 0:A]，多出的分片 1 会启动，但分片参数为null且不会执行业务逻辑。</td>
                     </tr>
                     <tr>
                         <td width="200">分片数 = 分片参数数量</td>
-                        <td width="100" align="center">[1,N] / N</td>
+                        <td width="100" align="left">[1,N] / N</td>
                         <td>配置的分片数等于分片参数数量[ex: 2 / 0:A,1:B]，则一片一线程一参数，各自执行业务逻辑。</td>
                     </tr>
                     <tr>
                         <td width="200">分片数 < 分片参数数量</td>
-                        <td width="100" align="center">[1,N] / N + 1</td>
+                        <td width="100" align="left">[1,N] / N + 1</td>
                         <td>配置的分片数小于分片参数数量[ex: 2 / 0:A,1:B,2:C]，多出的参数 2:C 不会被任何分片获取执行。</td>
                     </tr>
                 </table>
@@ -97,12 +97,20 @@
                 <table style="table-layout:fixed"
                        class="table table-condensed table-bordered table-hover table-striped">
                     <tr>
-                        <td width="200">*/5 * * * * ?</td>
-                        <td>每隔5秒执行一次</td>
+                        <td width="210">[秒] [分] [小时] [日] [月] [周] [年]</td>
+                        <td>格式</td>
+                    </tr>
+                    <tr>
+                        <td>*/1 * * * * ?</td>
+                        <td>每隔1秒执行一次</td>
                     </tr>
                     <tr>
                         <td>0 */1 * * * ?</td>
                         <td>每隔1分钟执行一次</td>
+                    </tr>
+                    <tr>
+                        <td>0 0 0/1 * * ?</td>
+                        <td>每隔1小时执行一次（整点）</td>
                     </tr>
                     <tr>
                         <td>0 0 12 * * ?</td>

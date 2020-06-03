@@ -289,7 +289,7 @@ public class ExampleController {
         JobScheduler jobScheduler = createJobScheduler();
         jobScheduler.init();
         jobScheduler.getSchedulerFacade().registerStartUpInfo(false);//是否启动
-        maps.put(JobsConstants.HEART_JOB_CLASS_BEAN_NAME, jobScheduler);
+        maps.put(JobsConstants.SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME, jobScheduler);
         return result;
     }
 
@@ -303,7 +303,7 @@ public class ExampleController {
         Result<String> result = new Result<String>();
         result.setCode(0);
         result.setDatas("返回了");
-        maps.remove(JobsConstants.HEART_JOB_CLASS_BEAN_NAME);
+        maps.remove(JobsConstants.SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME);
         return result;
     }
 
@@ -313,7 +313,7 @@ public class ExampleController {
         result.setCode(0);
         result.setDatas("返回了");
 
-        JobsConfigCache.jobSchedulerMap.get(JobsConstants.HEART_JOB_CLASS_BEAN_NAME).getSchedulerFacade().registerStartUpInfo(true);//是否启动
+        JobsConfigCache.jobSchedulerMap.get(JobsConstants.SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME).getSchedulerFacade().registerStartUpInfo(true);//是否启动
 
         return result;
     }
@@ -328,7 +328,7 @@ public class ExampleController {
 
         LiteJobConfiguration liteJobConfiguration = getLiteJobConfiguration(syncTaskJob.getClass(), "0/1 * * * * ?", 2, shardingItemParameters);
 
-        JobsConfigCache.jobSchedulerMap.get(JobsConstants.HEART_JOB_CLASS_BEAN_NAME).getSchedulerFacade().updateJobConfiguration(liteJobConfiguration);
+        JobsConfigCache.jobSchedulerMap.get(JobsConstants.SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME).getSchedulerFacade().updateJobConfiguration(liteJobConfiguration);
 
         return result;
     }
@@ -339,7 +339,7 @@ public class ExampleController {
         result.setCode(0);
         result.setDatas("返回了");
 
-        JobsConfigCache.jobSchedulerMap.get(JobsConstants.HEART_JOB_CLASS_BEAN_NAME).getSchedulerFacade().registerStartUpInfo(false);
+        JobsConfigCache.jobSchedulerMap.get(JobsConstants.SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME).getSchedulerFacade().registerStartUpInfo(false);
 
         return result;
     }
@@ -350,7 +350,7 @@ public class ExampleController {
 
     String shardingItemParameters;
 
-    String jobClassBeanName = JobsConstants.HEART_JOB_CLASS_BEAN_NAME;
+    String jobClassBeanName = JobsConstants.SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME;
 
     @Resource
     JobsConfig jobsConfig;

@@ -98,17 +98,19 @@ function initTable() {
             {
                 field: 'jobName',
                 title: 'Job名称',
+                width: 220,
                 align: "left",
                 formatter: paramsMatter
             }, {
                 field: 'jobClassBeanName',
                 title: 'Bean名称',
+                width: 220,
                 align: "left",
                 formatter: paramsMatter
             }, {
                 field: 'shardingTotalCount',
                 title: '分片数',
-                width: 80,
+                width: 60,
                 align: "center"
             }, {
                 field: 'shardingItemParams',
@@ -118,12 +120,13 @@ function initTable() {
             }, {
                 field: 'cronExpression',
                 title: 'Cron表达式',
-                width: 100,
+                width: 120,
                 align: "center",
                 formatter: paramsMatter
             }, {
                 field: 'remark',
                 title: '备注',
+                width: 200,
                 align: "left",
                 formatter: paramsMatter
             }, {
@@ -357,7 +360,7 @@ function jobStatusFormatter(value) {
 function operateFormatter(value, row, index) {
     switch (value) {
         case 0:
-            if ("HeartStatusJob" === row.jobName) {
+            if ("SystemListenerJob" === row.jobName) {
                 return [
                     "<div class=’form-inline‘>",
                     "<button type='button' class='btn btn-primary' onclick='update(" + JSON.stringify(row) + ")'>编辑</button>",
@@ -373,7 +376,7 @@ function operateFormatter(value, row, index) {
                 ].join('');
             }
         case 1:
-            if ("HeartStatusJob" === row.jobName) {
+            if ("SystemListenerJob" === row.jobName) {
                 return [
                     "<div class=’form-inline‘>",
                     "<button type='button' class='btn btn-primary' onclick='update(" + JSON.stringify(row) + ")'>编辑</button>",

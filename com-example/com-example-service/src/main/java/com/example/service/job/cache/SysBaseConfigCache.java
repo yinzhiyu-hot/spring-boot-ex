@@ -24,11 +24,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class SysBaseConfigCache implements BaseCache {
+
     /**
      * sys_base_config 配置map
      * KEY -> biz_type  Value Map for bizType
      */
-    public final static Map<String, Map<String, List<SysBaseConfig>>> sysBaseConfigMap = new HashMap<String, Map<String, List<SysBaseConfig>>>();
+    public final static Map<String, Map<String, List<SysBaseConfig>>> sysBaseConfigMap = new HashMap<>();
 
     @Resource
     private SysBaseConfigService sysBaseConfigService;

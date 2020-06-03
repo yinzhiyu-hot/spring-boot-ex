@@ -1,4 +1,4 @@
-package com.example.service.job.heart;
+package com.example.service.job.listener;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.dangdang.ddframe.job.api.ShardingContext;
@@ -26,16 +26,17 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 /**
- * @Description 心跳状态监测JOB
- * @PackagePath com.example.service.job.heart.HeartStatusJob
+ * @Description 系统监听JOB
+ * @PackagePath com.example.service.job.listener.SystemListenerJob
  * @Author YINZHIYU
- * @Date 2020/5/8 14:10
+ * @Date 2020/6/3 16:06
  * @Version 1.0.0.0
  **/
 @Slf4j
-@Component("HeartStatusJob")
+@Component("SystemListenerJob")
 @DisallowConcurrentExecution
-public class HeartStatusJob extends BaseSimpleJob {
+public class SystemListenerJob extends BaseSimpleJob {
+
     @Resource
     Environment environment;
 
@@ -75,7 +76,7 @@ public class HeartStatusJob extends BaseSimpleJob {
             try {
                 sysJobConfigMapRedis = redisUtils.getValue(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);
             } catch (Exception e) {
-                log.error(String.format("HeartStatusJob ==> syncSysJobConfigCache ==> 操作Redis ==> 异常：%s", e));
+                log.error(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 操作Redis ==> 异常：%s", e));
             }
 
             if (ObjectUtil.isEmpty(sysJobConfigMapRedis)) {
@@ -101,7 +102,7 @@ public class HeartStatusJob extends BaseSimpleJob {
                     //同步更新覆盖本地Job配置map
                     JobsConfigCache.sysJobConfigMap.put(entry.getKey(), entry.getValue());
 
-                    log.info(String.format("HeartStatusJob ==> syncSysJobConfigCache ==> 心跳状态监测Job ==> Job:%s ==> 执行 %s", entry.getKey(), JobStatusEnum.getRemark(entry.getValue().getJobStatus())));
+                    log.info(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 心跳状态监测Job ==> Job:%s ==> 执行 %s", entry.getKey(), JobStatusEnum.getRemark(entry.getValue().getJobStatus())));
                 }
 
                 //如果是更新配置操作
@@ -124,12 +125,12 @@ public class HeartStatusJob extends BaseSimpleJob {
                     try {
                         redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
                     } catch (Exception e) {
-                        log.error(String.format("HeartStatusJob ==> syncSysJobConfigCache ==> 操作Redis ==> 异常：%s", e));
+                        log.error(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 操作Redis ==> 异常：%s", e));
                     }
                 }
             }
         } catch (Exception e) {
-            log.error(String.format("HeartStatusJob ==> syncSysJobConfigCache ==> 异常：%s", e));
+            log.error(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 异常：%s", e));
         }
     }
 
@@ -148,7 +149,7 @@ public class HeartStatusJob extends BaseSimpleJob {
             try {
                 sysBaseConfig = redisUtils.getValue(RedisConstants.SYS_BASE_CONFIG_MAP_KEY);
             } catch (Exception e) {
-                log.error(String.format("HeartStatusJob ==> syncSysBaseConfigCache ==> 操作Redis ==> 异常：%s", e));
+                log.error(String.format("SystemListenerJob ==> syncSysBaseConfigCache ==> 操作Redis ==> 异常：%s", e));
             }
 
             if (ObjectUtil.isEmpty(sysBaseConfig)) {
@@ -166,11 +167,11 @@ public class HeartStatusJob extends BaseSimpleJob {
                 try {
                     redisUtils.set(RedisConstants.SYS_BASE_CONFIG_MAP_KEY, sysBaseConfig);
                 } catch (Exception e) {
-                    log.error(String.format("HeartStatusJob ==> syncSysBaseConfigCache ==> 操作Redis ==> 异常：%s", e));
+                    log.error(String.format("SystemListenerJob ==> syncSysBaseConfigCache ==> 操作Redis ==> 异常：%s", e));
                 }
             }
         } catch (Exception e) {
-            log.error(String.format("HeartStatusJob ==> syncSysBaseConfigCache ==> 异常：%s", e));
+            log.error(String.format("SystemListenerJob ==> syncSysBaseConfigCache ==> 异常：%s", e));
         }
     }
 
@@ -192,7 +193,6 @@ public class HeartStatusJob extends BaseSimpleJob {
                 )
         ).overwrite(true).build();
     }
-
 
     /*
      * @Description 获取Ip+端口

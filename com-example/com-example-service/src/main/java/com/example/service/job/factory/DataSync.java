@@ -38,7 +38,7 @@ public abstract class DataSync {
         String radomStr = RandomUtil.randomString(6);
 
         try {
-            log.info(String.format("==> [%s]Thread ID: %s, DataSync 数据同步开始", radomStr, Thread.currentThread().getId()));
+
             // 程序开始时间
             Instant startTime = Instant.now();
 
@@ -53,7 +53,7 @@ public abstract class DataSync {
             log.info(String.format("==> [%s]Thread ID: %s, DataSync 数据同步结束, 同步 %s, 执行耗时 %s ms。", radomStr, Thread.currentThread().getId(), excuteResult ? "成功" : "失败", millis));
 
         } catch (Exception e) {
-            log.info(String.format("==> [%s]Thread ID: %s, DataSync 数据同步异常 -> %s", radomStr, Thread.currentThread().getId(), e));
+            throw new RuntimeException(String.format("[%s]Thread ID: %s, DataSync 数据同步异常 ==> %s", radomStr, Thread.currentThread().getId(), e));
         }
         return excuteResult;
     }
