@@ -2,7 +2,8 @@
 SQLyog Ultimate v12.4.0 (64 bit)
 MySQL - 5.5.18 : Database - test
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -100,9 +101,12 @@ CREATE TABLE `sys_job_config` (
 
 /*Data for the table `sys_job_config` */
 
-insert  into `sys_job_config`(`id`,`job_name`,`job_class_bean_name`,`sharding_total_count`,`sharding_item_params`,`cron_expression`,`job_status`,`remark`,`create_user`,`create_time`,`update_user`,`update_time`) values 
-(3,'ExampleSyncTaskJob','ExampleSyncTaskJob',1,'0=taskType:SYNC_TEST','0/1 * * * * ?',0,'一片一线程，一线程执行一个任务类型的数据[一个任务类型对应一个业务处理方法]','test','2020-04-13 11:16:50','test','2020-05-08 14:36:15'),
-(4,'HeartStatusJob','HeartStatusJob',2,'0=0,1=1','0/1 * * * * ?',1,'一片一线程，一线程执行JOB心跳状态监测','test','2020-04-20 15:14:32','test','2020-04-29 10:49:03'),
+insert  into `sys_job_config`(`id`,`job_name`,`job_class_bean_name`,`sharding_total_count`,`sharding_item_params`,`cron_expression`,`job_status`,`remark`,`create_user`,`create_time`,`update_user`,`update_time`) values 
+
+(3,'ExampleSyncTaskJob','ExampleSyncTaskJob',1,'0=taskType:SYNC_TEST','0/1 * * * * ?',0,'一片一线程，一线程执行一个任务类型的数据[一个任务类型对应一个业务处理方法]','test','2020-04-13 11:16:50','test','2020-05-08 14:36:15'),
+
+(4,'SystemListenerJob','SystemListenerJob',2,'0=0,1=1','0/1 * * * * ?',1,'一片一线程，一线程执行JOB心跳状态监测','test','2020-04-20 15:14:32','test','2020-04-29 10:49:03'),
+
 (6,'Example2SyncTaskJob','Example2SyncTaskJob',1,'0=taskType:SYNC_TEST2','0/1 * * * * ?',1,'一片一线程，一线程执行一个任务类型的数据[一个任务类型对应一个业务处理方法]','test','2020-05-08 14:31:20','test','2020-05-08 14:41:15');
 
 /*Table structure for table `user_info` */
@@ -121,10 +125,14 @@ CREATE TABLE `user_info` (
 
 /*Data for the table `user_info` */
 
-insert  into `user_info`(`id`,`name`,`age`,`skill`,`evaluate`,`fraction`) values 
-(1,'Sans',18,'睡觉','Sans是一个爱睡觉,并且身材较矮骨骼巨大的骷髅小胖子',60),
-(2,'papyrus',18,'JAVA','Papyrus是一个讲话大声、个性张扬的骷髅，给人自信、有魅力的骷髅小瘦子',58),
-(3,'Sans',18,'睡觉','Sans是一个爱睡觉,并且身材较矮骨骼巨大的骷髅小胖子',60),
+insert  into `user_info`(`id`,`name`,`age`,`skill`,`evaluate`,`fraction`) values 
+
+(1,'Sans',18,'睡觉','Sans是一个爱睡觉,并且身材较矮骨骼巨大的骷髅小胖子',60),
+
+(2,'papyrus',18,'JAVA','Papyrus是一个讲话大声、个性张扬的骷髅，给人自信、有魅力的骷髅小瘦子',58),
+
+(3,'Sans',18,'睡觉','Sans是一个爱睡觉,并且身材较矮骨骼巨大的骷髅小胖子',60),
+
 (4,'papyrus',18,'JAVA','Papyrus是一个讲话大声、个性张扬的骷髅，给人自信、有魅力的骷髅小瘦子',58);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
