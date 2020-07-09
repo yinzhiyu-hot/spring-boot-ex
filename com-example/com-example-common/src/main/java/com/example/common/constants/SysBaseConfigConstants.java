@@ -8,5 +8,9 @@ package com.example.common.constants;
  * @Version 1.0.0.0
  **/
 public interface SysBaseConfigConstants {
-
+    /**
+     * 重试次数
+     */
+    String RETRY_COUNT = "RETRY_COUNT";
+    String RETRY_COUNT_SYNC_TASK = "RETRY_COUNT_SYNC_TASK";//同步任务重置次数
 }

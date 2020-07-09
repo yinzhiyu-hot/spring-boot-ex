@@ -2,6 +2,7 @@ package com.example.service.business;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.example.domain.entity.SysJobConfig;
+import com.example.domain.query.SysJobConfigQuery;
 import org.springframework.stereotype.Component;
 
 /**
@@ -13,4 +14,5 @@ import org.springframework.stereotype.Component;
  **/
 @Component
 public interface SysJobConfigService extends IService<SysJobConfig> {
+    SysJobConfig getSysJobConfigByCondition(SysJobConfigQuery sysJobConfigQuery);
 }

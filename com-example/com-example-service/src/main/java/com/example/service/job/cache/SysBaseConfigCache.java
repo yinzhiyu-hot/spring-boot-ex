@@ -1,6 +1,8 @@
 package com.example.service.job.cache;
 
+import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.enums.DelFlagEnum;
 import com.example.domain.entity.SysBaseConfig;
@@ -65,5 +67,55 @@ public class SysBaseConfigCache implements BaseCache {
                 sysBaseConfigMap.put(entry.getKey().toString(), listBizKeyMap);
             }
         }
+    }
+
+    /*
+     * @Description 获取单个配置值
+     * @Params ==>
+     * @Param bizType
+     * @Param bizKey
+     * @Param defaultValue
+     * @Return T
+     * @Date 2020/6/15 15:16
+     * @Auther YINZHIYU
+     */
+    public static <T> T getSysBaseConfigFromGlobalMap(String bizType, String bizKey, T defaultValue) {
+        Map<String, List<SysBaseConfig>> listMap = sysBaseConfigMap.get(bizType);
+        if (ObjectUtil.isEmpty(listMap)) {
+            return defaultValue;
+        }
+        List<SysBaseConfig> sysBaseConfigs = listMap.get(bizKey);
+        if (ObjectUtil.isEmpty(sysBaseConfigs)) {
+            return defaultValue;
+        }
+        SysBaseConfig sysBaseConfig = sysBaseConfigs.get(0);
+        if (ObjectUtil.isEmpty(sysBaseConfig.getBizValue())) {
+            return defaultValue;
+        }
+        if (!ClassUtil.getClass(defaultValue).isPrimitive()) {
+            return ReflectUtil.invoke(defaultValue, "valueOf", sysBaseConfig.getBizValue());
+        }
+        return (T) sysBaseConfig.getBizValue();
+    }
+
+    /*
+     * @Description 获取批量配置值
+     * @Params ==>
+     * @Param bizType
+     * @Param bizKey
+     * @Return java.util.List<cn.wangoon.domain.entity.SysBaseConfig>
+     * @Date 2020/6/15 15:21
+     * @Auther YINZHIYU
+     */
+    public static List<SysBaseConfig> getSysBaseConfigListFromGlobalMap(String bizType, String bizKey) {
+        Map<String, List<SysBaseConfig>> listMap = sysBaseConfigMap.get(bizType);
+        if (ObjectUtil.isEmpty(listMap)) {
+            return null;
+        }
+        List<SysBaseConfig> sysBaseConfigs = listMap.get(bizKey);
+        if (ObjectUtil.isEmpty(sysBaseConfigs)) {
+            return null;
+        }
+        return sysBaseConfigs;
     }
 }

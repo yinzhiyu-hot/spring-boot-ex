@@ -14,4 +14,6 @@ public interface JobsConstants {
     String SHARDING_PARAM_TASK_TYPE = "taskType";
 
     String SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME = "SystemListenerJob";
+
+    Integer RETRY_COUNT = 2;//重试次数
 }
