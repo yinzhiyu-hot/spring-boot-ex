@@ -6,6 +6,7 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.json.JSONUtil;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -151,6 +152,7 @@ public class LogUtils {
         String json = JSONUtil.toJsonStr(logsEntity);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         String jsonFormatterStr = "";
         try {
             jsonFormatterStr = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(logsEntity);
