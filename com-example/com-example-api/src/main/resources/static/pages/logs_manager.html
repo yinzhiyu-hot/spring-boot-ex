@@ -23,10 +23,12 @@
     <script th:src="@{/static/script/common/bootstrap/js/bootstrap-select.min.js}"></script>
     <script th:src="@{/static/script/common/bootstrap/js/bootstrapValidator.min.js}"></script>
     <script th:src="@{/static/script/common/artDialog/js/dialog-plus.js}"></script>
-    <script th:src="@{/static/script/common/common.js}"></script>
-    <script th:src="@{/static/script/logs_manager.js}"></script>
+    <!--    <script th:src="@{/static/script/common/common.js}"></script>-->
+    <!--    <script th:src="@{/static/script/logs_manager.js}"></script>-->
+    <script>document.write('<script src="/com-example/static/script/common/common.js?t=' + new Date().getTime() + '"><\/script>')</script>
+    <script>document.write('<script src="/com-example/static/script/logs_manager.js?t=' + new Date().getTime() + '"><\/script>')</script>
 
-    <title>日志管理中心</title>
+    <title>Logs日志管理</title>
 </head>
 <style>
     table td {
@@ -38,13 +40,13 @@
 <body>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">数据查询</h3>
+        <h3 class="panel-title">Logs日志管理 - 数据查询</h3>
     </div>
     <div class="panel-body">
         <form class="form-inline">
             <div class="form-group">
                 <label for="hashKey">HashKey：</label>
-                <input type="text" class="form-control" id="hashKey">
+                <input type="text" class="form-control" style="width: 300px;" id="hashKey">
             </div>
             <div class="form-group">
                 <label for="queryDate">日志时间：</label>
@@ -61,7 +63,7 @@
 
 <div class="panel panel-primary" style="height: 100%">
     <div class="panel-heading">
-        <h3 class="panel-title">日志列表</h3>
+        <h3 class="panel-title">Logs日志列表</h3>
     </div>
     <div class="panel-body">
         <table id="table" data-height="500" style="table-layout:fixed"

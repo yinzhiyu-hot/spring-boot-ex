@@ -1,12 +1,14 @@
-package com.example.service.job.cache;
+package com.example.service.job.cache.impl;
 
 import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.ReflectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.example.common.enums.DelFlagEnum;
+import com.example.common.utils.LogUtils;
 import com.example.domain.entity.SysBaseConfig;
 import com.example.service.business.SysBaseConfigService;
+import com.example.service.job.cache.BaseCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +40,7 @@ public class SysBaseConfigCache implements BaseCache {
 
     @Override
     public void init() {
-        log.info("加载sysBaseConfigMap");
+        LogUtils.info("加载sysBaseConfigMap");
         QueryWrapper<SysBaseConfig> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq(SysBaseConfig.COL_DEL_FLAG, DelFlagEnum.NO.getFlag());
         List<SysBaseConfig> sysBaseConfigs = sysBaseConfigService.list(queryWrapper);

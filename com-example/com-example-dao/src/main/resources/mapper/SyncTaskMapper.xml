@@ -14,20 +14,48 @@
         <result column="ts" property="ts"/>
     </resultMap>
 
+    <resultMap id="chartMap" type="com.example.domain.vo.SyncTaskChartVO">
+        <id column="id" property="id"/>
+        <result column="task_status" property="taskStatus"/>
+        <result column="numbers" property="numbers"/>
+        <result column="create_date" property="date"/>
+    </resultMap>
+
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        id, task_type, task_status,task_desc, process_count, create_date, finish_date, ts
+        id,
+        task_type,
+        task_status,
+        task_desc,
+        process_count,
+        create_date,
+        finish_date,
+        ts
     </sql>
 
     <!--根据ID进行分片查询任务 and (id % #{mol} = #{molValue})-->
     <select id="getProcessTaskList" resultMap="BaseResultMap" parameterType="com.example.domain.dto.SyncTaskDto">
-        select *
+        select
+        <include refid="Base_Column_List"/>
         from sync_task
         where
         <![CDATA[
-               process_count < 5
+               process_count < #{retryCount}
         ]]>
-          and task_status in (0, 1)
+        and task_status in (0, 1)
           and task_type = #{taskType}
+    </select>
+
+    <select id="getTaskChartsList" resultMap="chartMap" parameterType="com.example.domain.dto.SyncTaskDto">
+        <![CDATA[
+        SELECT COUNT(id)                            AS numbers,
+               DATE_FORMAT(create_date, '%Y-%m-%d') AS create_date,
+               task_status                          AS task_status
+        FROM sync_task
+        WHERE create_date < DATE_SUB(CURDATE(), INTERVAL -1 DAY)
+          AND create_date >= DATE_SUB(CURDATE(), INTERVAL 6 DAY)
+        GROUP BY DATE_FORMAT(create_date, '%Y-%m-%d'), task_status
+        ORDER BY create_date ASC;
+        ]]>
     </select>
 </mapper>

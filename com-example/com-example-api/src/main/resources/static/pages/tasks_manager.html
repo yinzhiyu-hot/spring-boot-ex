@@ -13,6 +13,7 @@
     <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-theme.min.css}">
     <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrapValidator.min.css}">
     <link rel="stylesheet" th:href="@{/static/script/common/bootstrap/css/bootstrap-select.min.css}">
+    <link rel="stylesheet" th:href="@{/static/script/common/icharts/css/icharts.css}">
 
     <!-- JS -->
     <script th:src="@{/static/script/common/jquery/js/jquery.min.js}"></script>
@@ -23,11 +24,13 @@
     <script th:src="@{/static/script/common/bootstrap/js/bootstrap-select.min.js}"></script>
     <script th:src="@{/static/script/common/bootstrap/js/bootstrapValidator.min.js}"></script>
     <script th:src="@{/static/script/common/artDialog/js/dialog-plus.js}"></script>
-    <script th:src="@{/static/script/common/common.js}"></script>
-    <script th:src="@{/static/script/tasks_manager.js}"></script>
+    <script th:src="@{/static/script/common/icharts/js/ichart.1.2.1.min.js}"></script>
+    <!--    <script th:src="@{/static/script/common/common.js}"></script>-->
+    <!--    <script th:src="@{/static/script/tasks_manager.js}"></script>-->
+    <script>document.write('<script src="/com-example/static/script/common/common.js?t=' + new Date().getTime() + '"><\/script>')</script>
+    <script>document.write('<script src="/com-example/static/script/tasks_manager.js?t=' + new Date().getTime() + '"><\/script>')</script>
 
-
-    <title>Tasks管理中心</title>
+    <title>Tasks任务管理</title>
 </head>
 <style>
     table td {
@@ -36,20 +39,20 @@
         text-overflow: ellipsis;
     }
 </style>
-<body>
+<body style="margin-top: 0;">
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">数据查询</h3>
+        <h3 class="panel-title">Tasks任务管理 - 数据查询</h3>
     </div>
     <div class="panel-body">
         <form class="form-inline">
             <div class="form-group">
                 <label for="taskType">任务类型：</label>
-                <input type="text" class="form-control" id="taskType">
+                <input type="text" class="form-control" style="width: 300px;" id="taskType">
             </div>
             <div class="form-group">
                 <label for="taskType">任务描述：</label>
-                <input type="text" class="form-control" id="taskDesc">
+                <input type="text" class="form-control" style="width: 300px;" id="taskDesc">
             </div>
             <div class="form-group">
                 <label for="taskStatus">状态：</label>
@@ -60,6 +63,7 @@
                     <option th:value="2">已处理</option>
                     <option th:value="3">处理失败</option>
                     <option th:value="99">处理异常</option>
+                    <option th:value="100">终止</option>
                 </select>
             </div>
 
@@ -71,11 +75,21 @@
 
 <div class="panel panel-primary" style="height: 100%">
     <div class="panel-heading">
-        <h3 class="panel-title">Tasks列表</h3>
+        <h3 class="panel-title">Tasks任务列表</h3>
     </div>
     <div class="panel-body">
-        <table id="table" data-height="500" style="table-layout:fixed"
+        <table id="table" data-height="548" style="table-layout:fixed"
                class="table table-condensed table-bordered table-hover table-striped"></table>
+    </div>
+</div>
+
+<div class="panel panel-primary" style="height: 100%">
+    <div class="panel-heading">
+        <h3 class="panel-title">近7天任务处理情况</h3>
+    </div>
+    <div class="panel-body">
+        <div class="col-lg-8 col-lg-offset-0" id="canvasDiv">
+        </div>
     </div>
 </div>
 
@@ -113,6 +127,28 @@
                 </div>
             </div>
         </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="logsInfo" backdrop="static" keyboard="false">
+
+    <div style="width: 80%; z-index: 10; position: absolute; text-align: center; left: 15%; top: 20%;margin-left:-100px;margin-top:-10px">
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <label class="panel-title" style="font-size: 25px;font-family: 'Microsoft YaHei UI';font-weight:bold ">Logs日志列表</label>
+                <button type="button" class="btn btn-info" style="width: 65px;float: right;" id="closeLogsBtn">关闭
+                </button>
+            </div>
+            <div class="panel-body">
+                <input type="hidden" class="form-control" id="hashKey">
+                <input type="hidden" class="form-control" id="queryDate">
+                <table id="logsTable" style="table-layout:fixed"
+                       class="table table-condensed table-bordered table-hover table-striped"></table>
+            </div>
+        </div>
+
     </div>
 </div>
 </body>

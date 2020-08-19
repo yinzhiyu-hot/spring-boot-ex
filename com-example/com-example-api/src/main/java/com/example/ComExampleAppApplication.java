@@ -1,5 +1,6 @@
 package com.example;
 
+import com.example.common.utils.LogUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,8 +19,12 @@ public class ComExampleAppApplication {
     public static void main(String[] args) {
         try {
             SpringApplication.run(ComExampleAppApplication.class, args);
+
+            LogUtils.info("系统启动完成");
         } catch (Exception e) {
-            log.error(String.format("ComExampleAppApplication ==> SpringApplication.run(ComExampleAppApplication.class, args) ==> 异常：%s", e));
+            LogUtils.error(args, "SpringApplication.run(ComExampleAppApplication.class, args) ==> 异常", e);
+            System.exit(0);//正常退出
+            //System.exit(1);//强制退出
         }
     }
 }

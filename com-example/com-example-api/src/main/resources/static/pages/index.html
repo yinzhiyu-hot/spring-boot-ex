@@ -25,7 +25,7 @@
     <script th:src="@{/static/script/index.js}"></script>
 
 
-    <title>首页</title>
+    <title>OMS系统后台管理中心</title>
 </head>
 <style>
     html, body {
@@ -101,8 +101,13 @@
         text-decoration: none;
     }
 
-    li:hover {
-        list-style: none;
+    /*li:hover {*/
+    /*    list-style: none;*/
+    /*}*/
+
+    ul li ul li:hover {
+        background: #f5f5f5;
+        cursor: pointer;
     }
 
 </style>
@@ -117,25 +122,25 @@
                 <!-- 选项控制data-target对应的显隐 -->
                 <a href="#" data-toggle="collapse" data-target="#list">管理中心</a>
                 <!-- 隐藏的详细菜单 -->
-                <ul id="list" class="collapse in">
-                    <li class="active" style="padding: 10px; ">
+                <ul id="list" class="collapse in" style="padding:10px;">
+                    <li class="active" style="padding: 10px 10px 10px 3px; ">
                         <a onclick="go('/com-example/bases/pages')">
-                            基础配置管理
+                            Bases-基础配置管理
                         </a>
                     </li>
-                    <li class="active" style="padding: 10px; ">
+                    <li class="active" style="padding:  10px 10px 10px 3px; ">
                         <a onclick="go('/com-example/jobs/pages')">
-                            Jobs管理
+                            Jobs-调度管理
                         </a>
                     </li>
-                    <li class="active" style="padding: 10px">
+                    <li class="active" style="padding:  10px 10px 10px 3px;">
                         <a onclick="go('/com-example/tasks/pages')">
-                            Tasks管理
+                            Tasks-任务管理
                         </a>
                     </li>
-                    <li class="active" style="padding: 10px">
+                    <li class="active" style="padding:  10px 10px 10px 3px;">
                         <a onclick="go('/com-example/logs/pages')">
-                            日志管理
+                            Logs-日志管理
                         </a>
                     </li>
                 </ul>

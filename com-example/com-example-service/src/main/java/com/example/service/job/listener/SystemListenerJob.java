@@ -1,13 +1,19 @@
 package com.example.service.job.listener;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.dangdang.ddframe.job.api.ShardingContext;
 import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.dangdang.ddframe.job.config.JobCoreConfiguration;
 import com.dangdang.ddframe.job.config.simple.SimpleJobConfiguration;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
+import com.example.common.annotations.CronExpression;
+import com.example.common.annotations.ShardingItemParams;
+import com.example.common.annotations.ShardingTotalCount;
+import com.example.common.constants.BaseConstants;
 import com.example.common.constants.RedisConstants;
 import com.example.common.enums.JobStatusEnum;
+import com.example.common.utils.LogUtils;
 import com.example.common.utils.NetUtils;
 import com.example.common.utils.RedisUtils;
 import com.example.common.utils.SpringBootBeanUtil;
@@ -15,15 +21,16 @@ import com.example.domain.entity.SysBaseConfig;
 import com.example.domain.entity.SysJobConfig;
 import com.example.service.business.SysJobConfigService;
 import com.example.service.job.BaseSimpleJob;
-import com.example.service.job.cache.JobsConfigCache;
-import com.example.service.job.cache.SysBaseConfigCache;
-import lombok.extern.slf4j.Slf4j;
+import com.example.service.job.cache.impl.JobsConfigCache;
+import com.example.service.job.cache.impl.SysBaseConfigCache;
 import org.quartz.DisallowConcurrentExecution;
+import org.springframework.context.annotation.Description;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Description 系统监听JOB
@@ -32,19 +39,22 @@ import java.util.Map;
  * @Date 2020/6/3 16:06
  * @Version 1.0.0.0
  **/
-@Slf4j
 @Component("SystemListenerJob")
+@Description("系统 监听Job")
+@ShardingTotalCount(1)
+@ShardingItemParams("")
+@CronExpression("*/5 * * * * ?")
 @DisallowConcurrentExecution
 public class SystemListenerJob extends BaseSimpleJob {
 
     @Resource
-    Environment environment;
+    private Environment environment;
 
     @Resource
-    RedisUtils redisUtils;
+    private RedisUtils redisUtils;
 
     @Resource
-    public SysBaseConfigCache sysBaseConfigCache;
+    private SysBaseConfigCache sysBaseConfigCache;
 
     @Resource
     private SysJobConfigService sysJobConfigService;
@@ -76,7 +86,7 @@ public class SystemListenerJob extends BaseSimpleJob {
             try {
                 sysJobConfigMapRedis = redisUtils.getValue(RedisConstants.SYS_JOB_CONFIG_MAP_KEY);
             } catch (Exception e) {
-                log.error(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 操作Redis ==> 异常：%s", e));
+                LogUtils.error(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, "redisUtils.getValue(RedisConstants.SYS_JOB_CONFIG_MAP_KEY) ==> 处理异常", e);
             }
 
             if (ObjectUtil.isEmpty(sysJobConfigMapRedis)) {
@@ -90,7 +100,7 @@ public class SystemListenerJob extends BaseSimpleJob {
                     continue;
                 }
                 //如果本地状态和Redis存放的状态不一致，说明有人启停了job，并更新了Redis的jobs配置
-                if (!entry.getValue().getJobStatus().equals(sysJobConfigMapLocal.get(entry.getKey()).getJobStatus())) {
+                if (!Objects.equals(entry.getValue().getJobStatus(), sysJobConfigMapLocal.get(entry.getKey()).getJobStatus())) {
 
                     //管理job启停
                     JobsConfigCache.jobSchedulerMap.get(entry.getKey()).getSchedulerFacade().registerStartUpInfo(JobStatusEnum.getStart(entry.getValue().getJobStatus()));
@@ -102,11 +112,11 @@ public class SystemListenerJob extends BaseSimpleJob {
                     //同步更新覆盖本地Job配置map
                     JobsConfigCache.sysJobConfigMap.put(entry.getKey(), entry.getValue());
 
-                    log.info(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 心跳状态监测Job ==> Job:%s ==> 执行 %s", entry.getKey(), JobStatusEnum.getRemark(entry.getValue().getJobStatus())));
+                    LogUtils.info(String.format("心跳状态监测Job ==> Job:%s ==> 执行 %s", entry.getKey(), JobStatusEnum.getRemark(entry.getValue().getJobStatus())));
                 }
 
                 //如果是更新配置操作
-                if (entry.getValue().isUpdateFlag() && !getLocalIpPort().equals(entry.getValue().getUpdateIpPort())) {
+                if (entry.getValue().isUpdateFlag() && !StrUtil.equals(getLocalIpPort(), entry.getValue().getUpdateIpPort())) {
                     //更新调度配置信息
                     SimpleJob syncTaskJob = (SimpleJob) SpringBootBeanUtil.getBean(entry.getKey());
                     LiteJobConfiguration liteJobConfiguration = getLiteJobConfiguration(syncTaskJob.getClass(), entry.getValue().getCronExpression(), entry.getValue().getShardingTotalCount(), entry.getValue().getShardingItemParams());
@@ -125,12 +135,12 @@ public class SystemListenerJob extends BaseSimpleJob {
                     try {
                         redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
                     } catch (Exception e) {
-                        log.error(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 操作Redis ==> 异常：%s", e));
+                        LogUtils.error(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis, "redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis) ==> 处理异常", e);
                     }
                 }
             }
         } catch (Exception e) {
-            log.error(String.format("SystemListenerJob ==> syncSysJobConfigCache ==> 异常：%s", e));
+            LogUtils.error("处理异常", e);
         }
     }
 
@@ -149,7 +159,7 @@ public class SystemListenerJob extends BaseSimpleJob {
             try {
                 sysBaseConfig = redisUtils.getValue(RedisConstants.SYS_BASE_CONFIG_MAP_KEY);
             } catch (Exception e) {
-                log.error(String.format("SystemListenerJob ==> syncSysBaseConfigCache ==> 操作Redis ==> 异常：%s", e));
+                LogUtils.error(RedisConstants.SYS_BASE_CONFIG_MAP_KEY, "redisUtils.getValue(RedisConstants.SYS_BASE_CONFIG_MAP_KEY) ==> 处理异常", e);
             }
 
             if (ObjectUtil.isEmpty(sysBaseConfig)) {
@@ -157,7 +167,7 @@ public class SystemListenerJob extends BaseSimpleJob {
             }
 
             //如果存在更新/删除/新增配置操作
-            if (sysBaseConfig.isUpdateFlag() && !getLocalIpPort().equals(sysBaseConfig.getUpdateIpPort())) {
+            if (sysBaseConfig.isUpdateFlag() && !StrUtil.equals(getLocalIpPort(), sysBaseConfig.getUpdateIpPort())) {
 
                 //重新从数据库加载基础配置
                 sysBaseConfigCache.init();
@@ -167,11 +177,11 @@ public class SystemListenerJob extends BaseSimpleJob {
                 try {
                     redisUtils.set(RedisConstants.SYS_BASE_CONFIG_MAP_KEY, sysBaseConfig);
                 } catch (Exception e) {
-                    log.error(String.format("SystemListenerJob ==> syncSysBaseConfigCache ==> 操作Redis ==> 异常：%s", e));
+                    LogUtils.error(RedisConstants.SYS_BASE_CONFIG_MAP_KEY, sysBaseConfig, "redisUtils.set(RedisConstants.SYS_BASE_CONFIG_MAP_KEY, sysBaseConfig) ==> 处理异常", e);
                 }
             }
         } catch (Exception e) {
-            log.error(String.format("SystemListenerJob ==> syncSysBaseConfigCache ==> 异常：%s", e));
+            LogUtils.error("处理异常", e);
         }
     }
 
@@ -213,6 +223,6 @@ public class SystemListenerJob extends BaseSimpleJob {
      * @Auther YINZHIYU
      */
     private String getLocalPort() {
-        return environment.getProperty("local.server.port");
+        return environment.getProperty(BaseConstants.LOCAL_SERVER_PORT);
     }
 }

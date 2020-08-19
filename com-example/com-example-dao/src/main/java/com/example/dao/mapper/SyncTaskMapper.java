@@ -3,6 +3,7 @@ package com.example.dao.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.example.domain.dto.SyncTaskDto;
 import com.example.domain.entity.SyncTask;
+import com.example.domain.vo.SyncTaskChartVO;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ import java.util.List;
  **/
 public interface SyncTaskMapper extends BaseMapper<SyncTask> {
     List<SyncTask> getProcessTaskList(SyncTaskDto syncTaskDto);
+
+    List<SyncTaskChartVO> getTaskChartsList(SyncTaskDto syncTaskDto);
 }

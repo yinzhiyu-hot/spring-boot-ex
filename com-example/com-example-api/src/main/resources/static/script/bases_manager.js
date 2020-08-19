@@ -148,7 +148,7 @@ function initTable() {
                 field: 'bizType',
                 title: '业务类型',
                 align: "left",
-                width: 250,
+                width: 200,
                 formatter: paramsMatter
             }, {
                 field: 'bizKey',

@@ -1,4 +1,4 @@
-package com.example.service.job.sync.biz.example;
+package com.example.service.job.sync.example.biz;
 
 import com.example.domain.entity.SyncTask;
 import org.springframework.stereotype.Component;

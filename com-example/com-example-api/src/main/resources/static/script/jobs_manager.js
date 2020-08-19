@@ -98,13 +98,11 @@ function initTable() {
             {
                 field: 'jobName',
                 title: 'Job名称',
-                width: 220,
                 align: "left",
                 formatter: paramsMatter
             }, {
                 field: 'jobClassBeanName',
                 title: 'Bean名称',
-                width: 220,
                 align: "left",
                 formatter: paramsMatter
             }, {
@@ -126,15 +124,20 @@ function initTable() {
             }, {
                 field: 'remark',
                 title: '备注',
-                width: 200,
                 align: "left",
                 formatter: paramsMatter
             }, {
                 field: 'jobStatus',
-                title: '状态',
-                width: 50,
+                title: '启停状态',
+                width: 75,
                 align: "center",
                 formatter: jobStatusFormatter
+            }, {
+                field: 'lifeFlag',
+                title: '工作状态',
+                width: 75,
+                align: "center",
+                formatter: lifeFlagFormatter
             }, {
                 field: 'jobStatus',
                 title: '操作',
@@ -345,6 +348,19 @@ function submitUpdate(value) {
 }
 
 function jobStatusFormatter(value) {
+    switch (value) {
+        case 0:
+            return "<span class='glyphicon glyphicon-remove-circle' style='color: red;font-size: large'></span>";
+
+        case 1:
+            return "<span class='glyphicon glyphicon-ok-circle' style='color: steelblue;font-size: large'></span>";
+
+        default:
+            return "-";
+    }
+}
+
+function lifeFlagFormatter(value) {
     switch (value) {
         case 0:
             return "<span class='glyphicon glyphicon-remove' style='color: red;font-size: large'></span>";

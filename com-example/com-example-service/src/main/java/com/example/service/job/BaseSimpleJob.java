@@ -22,7 +22,7 @@ import com.example.service.business.SyncTaskDataService;
 import com.example.service.business.SyncTaskExceptionService;
 import com.example.service.business.SyncTaskService;
 import com.example.service.business.SysJobConfigService;
-import com.example.service.job.cache.SysBaseConfigCache;
+import com.example.service.job.cache.impl.SysBaseConfigCache;
 import com.example.service.job.factory.DataSyncFactory;
 import org.springframework.stereotype.Component;
 

@@ -22,13 +22,13 @@ import javax.annotation.Resource;
 public class JobsConfig {
 
     @Resource
-    private ZookeeperRegistryCenter regCenter;
+    public ZookeeperRegistryCenter regCenter;
 
     public JobsConfig() {
     }
 
     /**
-     * 添加job
+     * job zk cron 建立关系
      *
      * @param simpleJob
      * @param cron
@@ -40,9 +40,14 @@ public class JobsConfig {
         return new SpringJobScheduler(simpleJob, regCenter, getLiteJobConfiguration(simpleJob.getClass(), cron, shardingTotalCount, shardingItemParameters));
     }
 
-
     /**
-     * @Description 任务配置类
+     * cron
+     *
+     * @param jobClass
+     * @param cron
+     * @param shardingTotalCount
+     * @param shardingItemParameters
+     * @return
      */
     private LiteJobConfiguration getLiteJobConfiguration(final Class<? extends SimpleJob> jobClass, final String cron, final int shardingTotalCount, final String shardingItemParameters) {
         return LiteJobConfiguration.newBuilder(

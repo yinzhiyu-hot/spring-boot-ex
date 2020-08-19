@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.example.dao.mapper.SyncTaskMapper;
 import com.example.domain.dto.SyncTaskDto;
 import com.example.domain.entity.SyncTask;
+import com.example.domain.vo.SyncTaskChartVO;
 import com.example.manager.SyncTaskManager;
 import com.example.service.business.SyncTaskService;
 import org.springframework.stereotype.Service;
@@ -44,5 +45,10 @@ public class SyncTaskServiceImpl extends ServiceImpl<SyncTaskMapper, SyncTask> i
     @Override
     public List<SyncTask> getProcessTaskList(SyncTaskDto syncTaskDto) {
         return this.baseMapper.getProcessTaskList(syncTaskDto);
+    }
+
+    @Override
+    public List<SyncTaskChartVO> getTaskChartsList(SyncTaskDto syncTaskDto) {
+        return this.baseMapper.getTaskChartsList(syncTaskDto);
     }
 }

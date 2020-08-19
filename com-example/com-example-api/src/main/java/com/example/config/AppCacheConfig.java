@@ -1,6 +1,8 @@
-package com.example.service.job.cache;
+package com.example.config;
 
 import com.example.common.utils.SpringBootBeanUtil;
+import com.example.service.job.cache.impl.JobsConfigCache;
+import com.example.service.job.cache.impl.SysBaseConfigCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -10,7 +12,7 @@ import javax.annotation.Resource;
 
 /**
  * @Description 系统启动中加载各种全局配置
- * @PackagePath com.example.service.job.cache.AppCacheConfig
+ * @PackagePath com.example.config.AppCacheConfig
  * @Author YINZHIYU
  * @Date 2020/5/22 11:46
  * @Version 1.0.0.0

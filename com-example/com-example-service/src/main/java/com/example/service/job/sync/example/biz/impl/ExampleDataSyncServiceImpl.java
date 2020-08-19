@@ -1,8 +1,8 @@
-package com.example.service.job.sync.biz.example.impl;
+package com.example.service.job.sync.example.biz.impl;
 
 import cn.hutool.json.JSONUtil;
 import com.example.domain.entity.SyncTask;
-import com.example.service.job.sync.biz.example.ExampleDataSyncService;
+import com.example.service.job.sync.example.biz.ExampleDataSyncService;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;

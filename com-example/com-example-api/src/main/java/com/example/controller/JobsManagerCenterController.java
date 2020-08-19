@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -8,16 +9,19 @@ import com.dangdang.ddframe.job.api.simple.SimpleJob;
 import com.dangdang.ddframe.job.config.JobCoreConfiguration;
 import com.dangdang.ddframe.job.config.simple.SimpleJobConfiguration;
 import com.dangdang.ddframe.job.lite.config.LiteJobConfiguration;
+import com.example.common.constants.BaseConstants;
 import com.example.common.constants.RedisConstants;
 import com.example.common.enums.JobStatusEnum;
+import com.example.common.utils.LogUtils;
 import com.example.common.utils.NetUtils;
 import com.example.common.utils.RedisUtils;
 import com.example.common.utils.SpringBootBeanUtil;
 import com.example.domain.common.Result;
+import com.example.domain.dto.RedisLogDto;
 import com.example.domain.entity.SysJobConfig;
 import com.example.domain.vo.BasePageVO;
 import com.example.service.business.SysJobConfigService;
-import com.example.service.job.cache.JobsConfigCache;
+import com.example.service.job.cache.impl.JobsConfigCache;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -65,15 +69,15 @@ public class JobsManagerCenterController {
     @RequestMapping(value = "/listPage")
     @ResponseBody
     public Map<String, Object> listPage(@ApiParam(name = "分页", required = true) BasePageVO basePageVO, @ApiParam(name = "Job配置", required = true) SysJobConfig sysJobConfig) {
-        Page<SysJobConfig> page = new Page<SysJobConfig>(basePageVO.getPageNumber(), basePageVO.getPageSize());
+        Page<SysJobConfig> page = new Page<>(basePageVO.getPageNumber(), basePageVO.getPageSize());
         QueryWrapper<SysJobConfig> queryWrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotEmpty(sysJobConfig.getJobStatus())) {
             queryWrapper.eq(SysJobConfig.COL_JOB_STATUS, sysJobConfig.getJobStatus());
         }
-
+        queryWrapper.orderByAsc(SysJobConfig.COL_JOB_NAME);
         IPage<SysJobConfig> pages = sysJobConfigService.getBaseMapper().selectPage(page, queryWrapper);
         //bootstrap-table要求服务器返回的json须包含：total，rows
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("total", pages.getTotal());
         map.put("rows", pages.getRecords());
         return map;
@@ -114,8 +118,13 @@ public class JobsManagerCenterController {
                 //更新Redis
                 sysJobConfigMapRedis.put(sysJobConfigLocal.getJobClassBeanName(), sysJobConfigLocal);
                 redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
+
+                redisUtils.recordLogs(RedisConstants.SYS_LOGS + DateUtil.format(DateUtil.date(), RedisConstants.LOGS_FORMAT), sysJobConfigLocal.getJobClassBeanName(),
+                        new RedisLogDto(String.format("JobsManagerCenterController ==> start ==> %s 启动成功。", sysJobConfigLocal.getJobClassBeanName())),
+                        RedisConstants.LOGS_EXPIRE_DAYS);
+
             } catch (Exception e) {
-                log.error(String.format("JobsManagerCenterController ==> start ==> 操作Redis ==> 异常：%s", e));
+                LogUtils.error(sysJobConfig, "Job 启动异常", e);
             }
 
             return Result.ok("执行成功");
@@ -158,8 +167,12 @@ public class JobsManagerCenterController {
                 //更新Redis
                 sysJobConfigMapRedis.put(sysJobConfigLocal.getJobClassBeanName(), sysJobConfigLocal);
                 redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
+
+                redisUtils.recordLogs(RedisConstants.SYS_LOGS + DateUtil.format(DateUtil.date(), RedisConstants.LOGS_FORMAT), sysJobConfigLocal.getJobClassBeanName(),
+                        new RedisLogDto(String.format("JobsManagerCenterController ==> stop ==> %s 停止成功。", sysJobConfigLocal.getJobClassBeanName())),
+                        RedisConstants.LOGS_EXPIRE_DAYS);
             } catch (Exception e) {
-                log.error(String.format("JobsManagerCenterController ==> stop ==> 操作Redis ==> 异常：%s", e));
+                LogUtils.error(sysJobConfig, "Job 停止异常", e);
             }
 
             return Result.ok("执行成功");
@@ -191,7 +204,6 @@ public class JobsManagerCenterController {
             JobsConfigCache.jobSchedulerMap.get(sysJobConfig.getJobClassBeanName()).getSchedulerFacade().updateJobConfiguration(liteJobConfiguration);
 
             //更新数据库状态
-            sysJobConfig.setUpdateTime(new Date());
             sysJobConfigService.updateById(sysJobConfig);
 
             //更新本地
@@ -204,8 +216,12 @@ public class JobsManagerCenterController {
                 //更新Redis
                 sysJobConfigMapRedis.put(sysJobConfig.getJobClassBeanName(), sysJobConfig);
                 redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMapRedis);
+
+                redisUtils.recordLogs(RedisConstants.SYS_LOGS + DateUtil.format(DateUtil.date(), RedisConstants.LOGS_FORMAT), sysJobConfig.getJobClassBeanName(),
+                        new RedisLogDto(String.format("JobsManagerCenterController ==> update ==> %s 编辑成功。", sysJobConfig.getJobClassBeanName())),
+                        RedisConstants.LOGS_EXPIRE_DAYS);
             } catch (Exception e) {
-                log.error(String.format("JobsManagerCenterController ==> update ==> 操作Redis ==> 异常：%s", e));
+                LogUtils.error(sysJobConfig, "Job 修改异常", e);
             }
 
             return Result.ok("执行成功");
@@ -252,6 +268,6 @@ public class JobsManagerCenterController {
      * @Auther YINZHIYU
      */
     private String getLocalPort() {
-        return environment.getProperty("local.server.port");
+        return environment.getProperty(BaseConstants.LOCAL_SERVER_PORT);
     }
 }

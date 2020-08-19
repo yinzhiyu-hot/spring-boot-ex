@@ -20,6 +20,52 @@ function initTable() {
                 formatter: function (value, row, index) {
                     return index + 1;
                 }
+            },
+            {
+                field: 'orderNumber',
+                title: '订单号',
+                width: 160,
+                align: "left",
+                formatter: paramsMatter
+            }, {
+                field: 'platform',
+                title: '平台',
+                width: 80,
+                align: "left",
+                formatter: paramsMatter
+            }, {
+                field: 'site',
+                title: '站点',
+                width: 50,
+                align: "left",
+                formatter: paramsMatter
+            }, {
+                field: 'fbmSku',
+                title: 'FbmSku',
+                align: "left",
+                formatter: paramsMatter
+            }, {
+                field: 'platSku',
+                title: 'PlatSku',
+                align: "left",
+                formatter: paramsMatter
+            }, {
+                field: 'sku',
+                title: 'Sku',
+                align: "left",
+                formatter: paramsMatter
+            }, {
+                field: 'upc',
+                title: 'Upc',
+                width: 110,
+                align: "left",
+                formatter: paramsMatter
+            }, {
+                field: 'fnSku',
+                title: 'FnSku',
+                width: 110,
+                align: "left",
+                formatter: paramsMatter
             }, {
                 field: 'message',
                 title: 'Message',

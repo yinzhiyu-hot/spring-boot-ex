@@ -4,7 +4,7 @@ import com.example.common.enums.SyncTaskTypeEnum;
 import com.example.common.utils.SpringBootBeanUtil;
 import com.example.domain.entity.SyncTask;
 import com.example.service.job.factory.DataSync;
-import com.example.service.job.sync.biz.example.impl.ExampleDataSyncServiceImpl;
+import com.example.service.job.sync.example.biz.impl.ExampleDataSyncServiceImpl;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;

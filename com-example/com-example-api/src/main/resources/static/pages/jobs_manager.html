@@ -23,11 +23,12 @@
     <script th:src="@{/static/script/common/bootstrap/js/bootstrap-select.min.js}"></script>
     <script th:src="@{/static/script/common/bootstrap/js/bootstrapValidator.min.js}"></script>
     <script th:src="@{/static/script/common/artDialog/js/dialog-plus.js}"></script>
-    <script th:src="@{/static/script/common/common.js}"></script>
-    <script th:src="@{/static/script/jobs_manager.js}"></script>
+    <!--    <script th:src="@{/static/script/common/common.js}"></script>-->
+    <!--    <script th:src="@{/static/script/jobs_manager.js}"></script>-->
+    <script>document.write('<script src="/com-example/static/script/common/common.js?t=' + new Date().getTime() + '"><\/script>')</script>
+    <script>document.write('<script src="/com-example/static/script/jobs_manager.js?t=' + new Date().getTime() + '"><\/script>')</script>
 
-
-    <title>Jobs管理中心</title>
+    <title>Jobs调度管理</title>
 </head>
 <style>
     table td {
@@ -39,7 +40,7 @@
 <body>
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">数据查询</h3>
+        <h3 class="panel-title">Jobs调度管理 - 数据查询</h3>
     </div>
     <div class="panel-body">
         <form class="form-inline">
@@ -59,10 +60,10 @@
 
 <div class="panel panel-primary" style="height: 100%">
     <div class="panel-heading">
-        <h3 class="panel-title">Jobs列表</h3>
+        <h3 class="panel-title">Jobs调度列表</h3>
     </div>
     <div class="panel-body">
-        <table id="table" data-height="500" style="table-layout:fixed"
+        <table id="table" data-height="548" style="table-layout:fixed"
                class="table table-condensed table-bordered table-hover table-striped"></table>
     </div>
 </div>
@@ -73,7 +74,8 @@
     <div class="panel-body">
         <ul>
             <li>① 一个分片则是一个线程，处理一个参数配置下的业务逻辑</li>
-            <li>② 分片数 / 分片参数组合(N>=1)，分片参数中不允许带有','，即A,B,C可以是任意规则的参数[使用时按规则解析]，但中间不允许带','[影响分片]，A,B,C中如果有多种业务参数的需求请用'#'拼接[0:A ->0:bizA=valueA#bizB=valueB]
+            <li>② 分片数 / 分片参数组合(N>=1)，分片参数中不允许带有','，即A,B,C可以是任意规则的参数[使用时按规则解析]，但中间不允许带','[影响分片]，A,B,C中如果有多种业务参数的需求请用'#'拼接[0:A
+                ->0:bizA=valueA#bizB=valueB]
                 <table style="table-layout:fixed"
                        class="table table-condensed table-bordered table-hover table-striped">
                     <tr>
@@ -180,7 +182,7 @@
 </div>
 
 <div class="modal fade" id="updateJobConfig" backdrop="static" keyboard="false">
-    <div style="width: 600px;height:100px; z-index: 10; position: absolute; text-align: center; left: 35%; top: 20%;margin-left:-100px;margin-top:-10px">
+    <div style="width: 600px;height:100px; z-index: 10; position: absolute; text-align: center; left: 35%; top: 15%;margin-left:-100px;margin-top:-10px">
         　　　　
         <div class="panel panel-primary">
             <div class="panel-heading">
@@ -198,38 +200,47 @@
                                 <input type="hidden" name="jobClassBeanName" id="jobClassBeanName">
                                 <input type="hidden" name="jobStatus" id="jobStatus">
                                 <div class="form-group">
-                                    <label class="col-lg-4 control-label" for="shardingTotalCount"><label style="color: red;">*</label>分片数：</label>
-                                    <div class="col-lg-7">
-                                        <input type="text" class="form-control" name="shardingTotalCount"
+                                    <label class="col-lg-4 control-label" style="width: 140px;"
+                                           for="shardingTotalCount"><label
+                                            style="color: red;">*</label>分片数：</label>
+                                    <div class="col-lg-7" style="width: 430px;">
+                                        <input type="text" class="form-control" style="width: 400px;"
+                                               name="shardingTotalCount"
                                                id="shardingTotalCount"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-lg-4 control-label" for="shardingItemParams">分片参数：</label>
-                                    <div class="col-lg-7">
-                                        <textarea type="text" rows="4" style="width: 100%" class="form-control" name="shardingItemParams"
+                                    <label class="col-lg-4 control-label" style="width: 140px;"
+                                           for="shardingItemParams">分片参数：</label>
+                                    <div class="col-lg-7" style="width: 430px;">
+                                        <textarea type="text" rows="4" class="form-control" style="width: 400px;"
+                                                  name="shardingItemParams"
                                                   id="shardingItemParams"></textarea>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-lg-4 control-label" for="cronExpression"><label style="color: red;">*</label>Cron表达式：</label>
-                                    <div class="col-lg-7">
-                                        <input type="text" class="form-control" name="cronExpression"
+                                    <label class="col-lg-4 control-label" style="width: 140px;"
+                                           for="cronExpression"><label
+                                            style="color: red;">*</label>Cron表达式：</label>
+                                    <div class="col-lg-7" style="width: 430px;">
+                                        <input type="text" class="form-control" style="width: 400px;"
+                                               name="cronExpression"
                                                id="cronExpression"/>
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <label class="col-lg-4 control-label" for="remark">备注：</label>
-                                    <div class="col-lg-7">
-                                        <textarea type="text" rows="4" class="form-control" name="remark"
+                                    <label class="col-lg-4 control-label" style="width: 140px;" for="remark">备注：</label>
+                                    <div class="col-lg-7" style="width: 430px;">
+                                        <textarea type="text" rows="4" class="form-control" style="width: 400px;"
+                                                  name="remark"
                                                   id="remark"></textarea>
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="form-group" style="text-align: left">
                                     <div class="col-lg-7 col-lg-offset-4">
                                         <button type="button" class="btn btn-primary" style="width: 40%" id="submitBtn">提交</button>
                                         <button type="button" class="btn btn-info" style="width: 35%" id="cancelBtn">取消</button>

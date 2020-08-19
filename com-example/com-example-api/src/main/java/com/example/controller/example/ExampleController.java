@@ -16,7 +16,7 @@ import com.example.domain.common.Result;
 import com.example.domain.entity.UserInfoEntity;
 import com.example.domain.vo.UserInfoVO;
 import com.example.service.business.UserInfoService;
-import com.example.service.job.cache.JobsConfigCache;
+import com.example.service.job.cache.impl.JobsConfigCache;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;

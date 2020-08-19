@@ -4,15 +4,17 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.example.common.constants.BaseConstants;
 import com.example.common.constants.RedisConstants;
 import com.example.common.enums.DelFlagEnum;
+import com.example.common.utils.LogUtils;
 import com.example.common.utils.NetUtils;
 import com.example.common.utils.RedisUtils;
 import com.example.domain.common.Result;
 import com.example.domain.entity.SysBaseConfig;
 import com.example.domain.vo.BasePageVO;
 import com.example.service.business.SysBaseConfigService;
-import com.example.service.job.cache.SysBaseConfigCache;
+import com.example.service.job.cache.impl.SysBaseConfigCache;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -62,7 +64,7 @@ public class BaseManagerCenterController {
     @RequestMapping(value = "/listPage")
     @ResponseBody
     public Map<String, Object> listPage(@ApiParam(name = "分页", required = true) BasePageVO basePageVO, @ApiParam(name = "基础配置", required = true) SysBaseConfig sysBaseConfig) {
-        Page<SysBaseConfig> page = new Page<SysBaseConfig>(basePageVO.getPageNumber(), basePageVO.getPageSize());
+        Page<SysBaseConfig> page = new Page<>(basePageVO.getPageNumber(), basePageVO.getPageSize());
         QueryWrapper<SysBaseConfig> queryWrapper = new QueryWrapper<>();
         if (ObjectUtil.isNotEmpty(sysBaseConfig.getBizType())) {
             queryWrapper.like(SysBaseConfig.COL_BIZ_TYPE, sysBaseConfig.getBizType());
@@ -74,17 +76,16 @@ public class BaseManagerCenterController {
         queryWrapper.orderByAsc(SysBaseConfig.COL_BIZ_TYPE, SysBaseConfig.COL_BIZ_KEY, SysBaseConfig.COL_BIZ_VALUE);
         IPage<SysBaseConfig> pages = sysBaseConfigService.getBaseMapper().selectPage(page, queryWrapper);
         //bootstrap-table要求服务器返回的json须包含：total，rows
-        Map<String, Object> map = new HashMap<String, Object>();
+        Map<String, Object> map = new HashMap<>();
         map.put("total", pages.getTotal());
         map.put("rows", pages.getRecords());
         return map;
     }
 
-
     /*
      * @Description 基础配置 删除
      * @Params ==>
-     * @Param sysJobConfig
+     * @Param sysBaseConfig
      * @Return cn.wangoon.domain.common.Result
      * @Date 2020/4/27 18:05
      * @Auther YINZHIYU
@@ -117,7 +118,7 @@ public class BaseManagerCenterController {
     /*
      * @Description 基础配置 更新
      * @Params ==>
-     * @Param sysJobConfig
+     * @Param sysBaseConfig
      * @Return cn.wangoon.domain.common.Result
      * @Date 2020/4/27 18:05
      * @Auther YINZHIYU
@@ -149,7 +150,7 @@ public class BaseManagerCenterController {
     /*
      * @Description 基础配置 新增
      * @Params ==>
-     * @Param sysJobConfig
+     * @Param sysBaseConfig
      * @Return cn.wangoon.domain.common.Result
      * @Date 2020/4/27 18:05
      * @Auther YINZHIYU
@@ -193,7 +194,7 @@ public class BaseManagerCenterController {
             //更新Redis
             redisUtils.set(RedisConstants.SYS_BASE_CONFIG_MAP_KEY, sysBaseConfig);
         } catch (Exception e) {
-            log.error(String.format("BaseManagerCenterController ==> syncSysBaseConfigCache ==> 操作Redis ==> 异常：%s", e));
+            LogUtils.error(sysBaseConfig, "通知同步基础配置到Redis ==> 操作Redis ==> 异常", e);
         }
     }
 
@@ -216,6 +217,6 @@ public class BaseManagerCenterController {
      * @Auther YINZHIYU
      */
     private String getLocalPort() {
-        return environment.getProperty("local.server.port");
+        return environment.getProperty(BaseConstants.LOCAL_SERVER_PORT);
     }
 }

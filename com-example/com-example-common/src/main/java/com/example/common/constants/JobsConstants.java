@@ -16,4 +16,9 @@ public interface JobsConstants {
     String SYSTEM_LISTENER_JOB_CLASS_BEAN_NAME = "SystemListenerJob";
 
     Integer RETRY_COUNT = 2;//重试次数
+
+    /**
+     * 默认表达式，默认十分钟跑一次
+     */
+    String DEFAULT_CRON_EXPRESSION = "0 */10 * * * ?";
 }
