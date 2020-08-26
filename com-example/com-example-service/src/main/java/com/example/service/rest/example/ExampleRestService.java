@@ -25,11 +25,9 @@ import java.util.List;
 public class ExampleRestService extends BaseRestService {
 
     public List<UserInfoEntity> userInfoList() {
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(restConfig.exampleUrl)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        ExampleRestApi service = retrofit.create(ExampleRestApi.class);
+
+        ExampleRestApi service = BuildService(restConfig.exampleUrl, ExampleRestApi.class, null);
+
         Response<List<UserInfoEntity>> response = null;
         try {
             response = service.userInfoList().execute();
