@@ -112,8 +112,6 @@ public class JobsConfigCache implements BaseCache {
      */
     private void startJobs(List<SysJobConfig> sysJobConfigs) {
 
-        //deleteAllNode();//慎用，会把leader 和 custer 全干掉
-
         for (SysJobConfig sysJobConfig : sysJobConfigs) {
             JobScheduler jobScheduler = createJobScheduler(sysJobConfig.getJobClassBeanName(), sysJobConfig.getCronExpression(), sysJobConfig.getShardingTotalCount(), sysJobConfig.getShardingItemParams());
             if (ObjectUtil.isNotEmpty(jobScheduler)) {
@@ -178,13 +176,16 @@ public class JobsConfigCache implements BaseCache {
                         sysJobConfig.setJobStatus(JobStatusEnum.STOP.getStatus());
                     }
 
-                    sysJobConfig.setCreateUser("Oms-Auto");
+                    sysJobConfig.setCreateUser("Sys");
                     sysJobConfig.setCreateTime(DateUtil.date());
-                    sysJobConfig.setUpdateUser("Oms-Auto");
+                    sysJobConfig.setUpdateUser("Sys");
                     sysJobConfig.setUpdateTime(DateUtil.date());
 
                     //数据库新增job配置
-                    sysJobConfigService.getBaseMapper().insert(sysJobConfig);
+                    boolean insertResult = sysJobConfigService.getBaseMapper().insert(sysJobConfig) > 0;
+                    if (insertResult) {
+                        sysJobConfigs.add(sysJobConfig);//如果是程序新增的JOB，则此处加到内存里，减少再查一次数据库
+                    }
                 }
 
                 JobScheduler jobScheduler = createJobScheduler(sysJobConfig.getJobClassBeanName(), sysJobConfig.getCronExpression(), sysJobConfig.getShardingTotalCount(), sysJobConfig.getShardingItemParams());
@@ -196,6 +197,17 @@ public class JobsConfigCache implements BaseCache {
                 }
             }
 
+            //全部初始化好后，再检查并删除需要废弃的Zk中的Job节点(删除数据库需要废弃的节点，在此同步删除Zk中的节点)
+            List<String> zkNodes = jobsConfig.getChildNodes("/");//Zk中Oms系统下的所有JOB节点
+            List<String> dbNodes = sysJobConfigs.stream().map(SysJobConfig::getJobClassBeanName).collect(Collectors.toList());//数据存在的节点
+            List<String> zkDeleteNodes = zkNodes.stream().filter(node -> {
+                String temp = node.substring(node.lastIndexOf(".") + 1);
+                return !dbNodes.contains(temp);
+            }).collect(Collectors.toList());//过滤出在数据库没有的节点
+            zkDeleteNodes.forEach(nodePath -> {
+                jobsConfig.deleteNode(nodePath);
+            });
+
             try {
                 redisUtils.set(RedisConstants.SYS_JOB_CONFIG_MAP_KEY, sysJobConfigMap);
             } catch (Exception e) {
@@ -204,25 +216,6 @@ public class JobsConfigCache implements BaseCache {
 
         } catch (Exception e) {
             LogUtils.error("加载启动定时任务异常", e);
-        }
-    }
-
-    /*
-     * @Description 删除所有节点
-     * @Params ==>
-     * @Return void
-     * @Date 2020/6/9 17:39
-     * @Auther YINZHIYU
-     */
-    private void deleteAllNode() {
-        try {
-            String path = "/";
-            CuratorFramework client = jobsConfig.regCenter.getClient();
-            Stat stat = new Stat();
-            client.getData().storingStatIn(stat).forPath(path);
-            client.delete().deletingChildrenIfNeeded().withVersion(stat.getVersion()).forPath(path);
-        } catch (Exception e) {
-            LogUtils.error("删除Zookeeper下oms 涉及的所有节点 ==> 异常", e);
         }
     }
 }
