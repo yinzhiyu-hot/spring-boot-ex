@@ -1,5 +1,5 @@
 spring:
-  # 配置数据源
+  # 配置数据源1
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
