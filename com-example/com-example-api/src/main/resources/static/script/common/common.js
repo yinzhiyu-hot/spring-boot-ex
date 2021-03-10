@@ -9,6 +9,8 @@ function paramsMatter(value, row, index) {
         return "";
     }
     var span = document.createElement('span');
+    span.setAttribute('data-toggle', 'tooltip');
+    span.setAttribute('data-placement', 'auto left');
     span.setAttribute('title', value);
     span.innerHTML = value;
     return span.outerHTML;

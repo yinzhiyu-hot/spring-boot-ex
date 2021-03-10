@@ -194,6 +194,11 @@ function initTable() {
             bizKey: Utils.get("bizKey").val()
         };
     }
+
+    //表格加载完毕后，处理动作
+    Utils.get('table').on('load-success.bs.table', function (data) {
+        $("[data-toggle='tooltip']").tooltip();
+    })
 }
 
 function operateFormatter(value, row, index) {
